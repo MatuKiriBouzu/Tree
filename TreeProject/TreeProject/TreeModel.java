@@ -3,6 +3,7 @@ package TreeProject;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TreeModel
 {
@@ -81,6 +82,7 @@ public class TreeModel
 	{
 		try
 		{
+			
 			FileReader fr = new FileReader(fileName);
 			BufferedReader br = new BufferedReader(fr);
 			
@@ -112,8 +114,10 @@ public class TreeModel
 	 *Branchの情報をファイルから読む
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public TreeBranch inputBranch()
+	public ArrayList<TreeBranch> inputBranch()
 	{
+		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>(this.branchsMax);
+		for(TreeBranch i: branchdate)
 		return null;
 	}
 	/**
