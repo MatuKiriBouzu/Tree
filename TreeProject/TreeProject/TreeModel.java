@@ -1,5 +1,6 @@
 package TreeProject;
 
+import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,9 +8,35 @@ import java.util.ArrayList;
 
 public class TreeModel
 {
+	/**
+	 * ノード群自体を保持するフィールド。
+	 * DeguchiShin 144849 6/10 記述
+	 **/
+	private ArrayList nodes;
 	
+	/**
+	 * ブランチ群自体を保持するフィールド。
+	 * DeguchiShin 144849 6/10 記述
+	 **/
+	private ArrayList branchs;
 	
+	/**
+	 * ノード群の最大数を保持するフィールド。
+	 * DeuchiShin 144849 6/10 記述
+	 **/
+	private int nodesMax;
 	
+	/**
+	 * ブランチ群の最大数を保持するフィールド。
+	 * DeguchiShin 144849 6/10 記述
+	 **/
+	private int branchsMax;
+	
+	/**
+	 * BufferedReader自体を保持するフィールド？(誰か分かる人修正たのみます)
+	 * DeguchiShin 144849 6/10 仮記述
+	 **/
+	private BufferedReader in;
 	
 	/**
 	 *getter
