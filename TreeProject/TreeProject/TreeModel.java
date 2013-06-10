@@ -114,14 +114,37 @@ public class TreeModel
 			String aBuffer;
 			String aString = br.readLine();
 			
-			while(aString != null) {
-				aBuffer = aString;
-				aString = br.readLine();
-				
-				System.out.println("aBuffer: " + aBuffer + " aString: " + aString);
-			}		
+			try
+			{
+				while(aString != null)
+				{
+					aBuffer = aString;
+					aString = br.readLine();
+					if(aString.contains("nodes:"))
+					{
+						br.mark(0);
+					}
+					if(aString.contains("branches:"))
+					{
+						
+						br.mark(1);
+					}
+					if(aString == null)
+					{
+						String[] strings = aBuffer.split(", ");
+						branchsMax = Integer.parseInt(strings[0]);
+					}
+				}
+			} catch (NullPointerException e)
+			{
+				System.out.println(e);
+			}
 			
-		} catch (IOException e)
+			inputBranch(br);
+		
+			br.close();
+			fr.close();
+	} catch (IOException e)
 		{
 			System.out.println(e);
 		}
@@ -139,19 +162,23 @@ public class TreeModel
 	 * Branchの情報をファイルから読む
 	 * 松きり坊主 144542 2013/6/3
 	 **/
-	public ArrayList<TreeBranch> inputBranch(BufferedReader br)
-	{
+	public ArrayList<TreeBranch> inputBranch(BufferedReader br) {
 		int a,b;
-		br.reset();
 		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>(this.branchsMax);
-
-		for(TreeBranch i: branchdate){
-			String aString = br.readLine(); 
-			Stiring aStrings[] = aString.split(", ");
-			a = Integer.parseInt(aString[0]);
-			b = Integer.parseInt(aString[1]);
-			i.setParent(a);
-			i.setChild(b);
+		
+		try
+		{
+			for(TreeBranch i: branchdate){
+				String aString = br.readLine(); 
+				String strings[] = aString.split(", ");
+				a = Integer.parseInt(strings[0]);
+				b = Integer.parseInt(strings[1]);
+				//i.setParent(a);
+				//i.setChild(b);
+			}
+		} catch (IOException e)
+		{
+			System.out.println(e);
 		}
 		return branchdate;
 	}
