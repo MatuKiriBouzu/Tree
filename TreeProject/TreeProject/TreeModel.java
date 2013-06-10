@@ -107,6 +107,7 @@ public class TreeModel
 	{
 		try
 		{
+			
 			FileReader fr = new FileReader(fileName);
 			BufferedReader br = new BufferedReader(fr);
 			
@@ -130,7 +131,7 @@ public class TreeModel
 	 * Nodeの情報をファイルから読む
 	 * 松きり坊主 144542 2013/6/3
 	 **/
-	public TreeNode inputNode()
+	public TreeNode inputNode(BufferedReader br)
 	{
 		return null;
 	}
@@ -138,9 +139,21 @@ public class TreeModel
 	 * Branchの情報をファイルから読む
 	 * 松きり坊主 144542 2013/6/3
 	 **/
-	public TreeBranch inputBranch()
+	public ArrayList<TreeBranch> inputBranch(BufferedReader br)
 	{
-		return null;
+		int a,b;
+		br.reset();
+		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>(this.branchsMax);
+
+		for(TreeBranch i: branchdate){
+			String aString = br.readLine(); 
+			Stiring aStrings[] = aString.split(", ");
+			a = Integer.parseInt(aString[0]);
+			b = Integer.parseInt(aString[1]);
+			i.setParent(a);
+			i.setChild(b);
+		}
+		return branchdate;
 	}
 	/**
 	 * View,Controllerに報告する.
