@@ -6,8 +6,7 @@ public class TreeController extends mvc.Controller{
 	
 	/**
 	 * TreeProjectのコントローラ。
-	 * g1144849 Deguchi Shin
-	 * 6/3 スタブ作成
+	 * DeguchiShin 144849 6/3 スタブ作成
 	 */
 	public TreeController() 
 	{
@@ -15,37 +14,30 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * TreeProjectのモデルを保持するフィールド。
+	 * DeguchiShin 144849 6/10 記述
 	 **/
-	TreeModel model;
+	private TreeModel model;
 	
 	/**
-	 *
-	 *
-	 *
+	 * TreeProjectのビューを保持するフィールド。
+	 * DeguchiShin 144849 6/10 記述
 	 **/
-	TreeView view;
+	private TreeView view;
 	
 	/**
-	 *
-	 *
-	 *
+	 * これなんでっしょ
 	 **/
 	Point previous;
 	
 	/**
-	 *
-	 *
-	 *
+	 * わからんです
 	 */
 	Point curent;
 	
 	/**
-	 *
-	 *
-	 *
+	 * マウスクリック時に応答するメソッド。
+	 * DeguchiShin 144849 6/10 スタブ作成
 	 **/
 	public void mouseClicked()
 	{
@@ -53,9 +45,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * マウスドラッグ時に応答するメソッド。
+	 * DeguchiShin 144849 6/10 スタブ作成
 	 **/
 	public void mouseDragged()
 	{
@@ -63,9 +54,7 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * わからんです
 	 **/
 	public void mouseEntered()
 	{
@@ -73,9 +62,7 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * わけわかめ
 	 **/
 	public void mouseExited()
 	{
@@ -83,9 +70,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * マウスの移動時に応答するメソッド。
+	 * DeguchiShin 144849 6/10 スタブ作成
 	 **/
 	public void mouseMoved()
 	{
@@ -93,9 +79,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * マウスプレス時(押し続けている状態)に応答するメソッド。
+	 * DeguchiShin 144849 6/10 スタブ作成
 	 **/
 	public void mousePressed()
 	{
@@ -103,9 +88,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * マウスリリース時(プレスの解除時)に応答するメソッド。
+	 * DeguchiShin 144849 6/10 スタブ作成
 	 **/
 	public void mouseReleased()
 	{
@@ -113,9 +97,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 * mvcのモデルを設定する。
-	 * g1144849 Deguchi Shin
-	 * 6/3 スタブ作成
+	 * mvcのモデルを設定するメソッド。
+	 * DeguchiShin 144849 6/3 スタブ作成
 	 **/
 	public void setModel(TreeModel model)
 	{
@@ -123,9 +106,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 * mvcのビューを設定する。
-	 * g1144849 Deguchi Shin
-	 * 6/3 スタブ作成
+	 * mvcのビューを設定するメソッド。
+	 * DeguchiShin 144849 6/3 スタブ作成
 	 **/
 	public void setView(TreeView view)
 	{
@@ -133,9 +115,8 @@ public class TreeController extends mvc.Controller{
 	}
 	
 	/**
-	 *
-	 *
-	 *
+	 * 自身を文字列として応答するメソッド。
+	 * DeguchiShin 144849 6/10 スタブ作成
 	 **/
 	public void toString(String aString)
 	{
