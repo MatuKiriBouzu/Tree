@@ -1,5 +1,8 @@
 package TreeProject;
 
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class TreeModel
 {
@@ -14,6 +17,7 @@ public class TreeModel
 	 **/
 	public int getNodesMax()
 	{
+		return 0;
 	}
 	/**
 	 *setter
@@ -22,6 +26,7 @@ public class TreeModel
 	 **/
 	public void setNodesMax(int x)
 	{
+		return;
 	}
 	/**
  	 *getter
@@ -31,6 +36,7 @@ public class TreeModel
 	 **/
 	public int getBranchsMax()
 	{
+		return 0;
 	}
 	/**
 	 *setter
@@ -39,6 +45,7 @@ public class TreeModel
 	 **/
 	public void setBranchsMax()
 	{
+		return;
 	}
 	/**
 	 *getter
@@ -47,6 +54,7 @@ public class TreeModel
 	 **/
 	public TreeNode getNodes(int index)
 	{
+		return null;
 	}
 	/**
 	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
@@ -54,6 +62,7 @@ public class TreeModel
 	 **/
 	public void calculateTree()
 	{
+		return;
 	}
 	/**
 	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
@@ -62,13 +71,34 @@ public class TreeModel
 	 **/
 	public void animationTree()
 	{
+		return;
 	}
 	/**
 	 *ファイルからそれぞれの情報を読み取る
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public void inputTree(String filename)
+	public void inputTree(String fileName)
 	{
+		try
+		{
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			
+			String aBuffer;
+			String aString = br.readLine();
+			
+			while(aString != null) {
+				aBuffer = aString;
+				aString = br.readLine();
+				
+				System.out.println("aBuffer: " + aBuffer + " aString: " + aString);
+			}		
+			
+		} catch (IOException e)
+		{
+			System.out.println(e);
+		}
+		return;
 	}
 	/**
 	 *Nodeの情報をファイルから読む
@@ -76,6 +106,7 @@ public class TreeModel
 	 **/
 	public TreeNode inputNode()
 	{
+		return null;
 	}
 	/**
 	 *Branchの情報をファイルから読む
@@ -83,6 +114,7 @@ public class TreeModel
 	 **/
 	public TreeBranch inputBranch()
 	{
+		return null;
 	}
 	/**
 	 *View,Controllerに報告する.
@@ -90,6 +122,7 @@ public class TreeModel
 	 **/
 	public void change()
 	{
+		return;
 	}
 	/**
 	 *描画する。
@@ -97,5 +130,6 @@ public class TreeModel
 	 **/
 	public void picture()
 	{
+		return;
 	}
 }
