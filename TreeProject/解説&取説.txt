@@ -1,0 +1,29 @@
+各ファイルやディレクトリの役割とか取説
+_ProjectName_ディレクトリ: ここに.javaファイルを入れて行きます
+			   ソースコードの最初はpackage _ProjectName_;を忘れずに
+_ProjectName_.app: 実際に動作するアプリケーションです
+		   プロジェクト名が変更されたらmain.scpt内に変更した名前を反映して下さい
+		   アイコンとかもこの中で設定できます
+_ProjectName_.mf: mainメソッドを内包させるクラスを指定するファイルです
+		  _MainClassName_が変更されたらここも編集して下さい
+build.xml: 全体的なantによる制御を担当するファイルです
+	   ProjectName,G_Name,MainClassNameが変更されたらここを編集必要があります
+	   mvc.jarを利用できるように記述しておきました
+	   extends mvc.[クラス名]と入力することでそのクラスを継承できるはずです
+Makefile: antでも命令が呼び出せますがこのファイルがあることでmakeでの命令が可能に
+	  基本的に編集する必要はありません
+	  make, make all: 変更のあった.javaファイルをコンパイルします
+	  make test: jarファイルからプログラムを呼び出します
+	  make doc: javadocを作成します
+	  make install: jarファイルをappファイルの指定位置に放り込んでappを作成します
+	  make clean: Classディレクトリ, _ProjectName_.jar, javadocを消去
+	       	      appファイルも初期状態になります(たぶん)
+
+その他、make作業で何か分からない点があれば気軽に聞いてくださーい
+
+
+テンプレに沿って作ってますが未定の部分は以下のように記述してます
+
+プロジェクト名: _ProjectName_
+グループ名: _G_Name_
+mainメソッドを内包するクラス: _MainClassName_
