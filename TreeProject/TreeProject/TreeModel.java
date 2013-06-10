@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class TreeModel
 {
@@ -133,7 +132,7 @@ public class TreeModel
 	 *Nodeの情報をファイルから読む
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public TreeNode inputNode()
+	public TreeNode inputNode(BufferedReader br)
 	{
 		return null;
 	}
@@ -141,11 +140,21 @@ public class TreeModel
 	 *Branchの情報をファイルから読む
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public ArrayList<TreeBranch> inputBranch()
+	public ArrayList<TreeBranch> inputBranch(BufferedReader br)
 	{
+		int a,b;
+		br.reset();
 		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>(this.branchsMax);
-		for(TreeBranch i: branchdate)
-		return null;
+
+		for(TreeBranch i: branchdate){
+			String aString = br.readLine(); 
+			Stiring aStrings[] = aString.split(", ");
+			a = Integer.parseInt(aString[0]);
+			b = Integer.parseInt(aString[1]);
+			i.setParent(a);
+			i.setChild(b);
+		}
+		return branchdate;
 	}
 	/**
 	 *View,Controllerに報告する.
