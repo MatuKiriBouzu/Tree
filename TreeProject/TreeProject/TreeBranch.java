@@ -40,28 +40,28 @@ public class TreeBranch{
      */
     public void decideParentPx()
     {
-        
+        return;
     }
     
     /**
      */
     public void decideChildPx()
     {
-        
+        return;
     }
     
     /**
      */
     public int getParent()
     {
-        
+        return 0;
     }
     
     /**
      */
     public int getChild()
     {
-        
+        return 0;
     }
     
 }

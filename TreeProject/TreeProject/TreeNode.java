@@ -1,63 +1,63 @@
 package TreeProject;
 
+import java.awt.Point;
 
 public class TreeNode{
     String date;
     int number;
-    point target;
+    Point target;
     int level;
     /**
      *-説明文、氏名、学生証、日付
      */
     public String getDate()
     {
-        
+        return null;
     }
     /**
      *-説明文、氏名、学生証、日付
      */
     public int getNumber()
     {
-        
-        
+		return 0;   
     }
     /**
      *-説明文、氏名、学生証、日付
      */
-    public point getTarget()
+    public Point getTarget()
     {
-        
+		return null;   
     }
     /**
      *-説明文、氏名、学生証、日付
      */
     public int getLevel()
     {
-        
+		return 0;   
     }
     /**
      *-説明文、氏名、学生証、日付
      */
-    public point getRJoint(){
-        
+    public Point getRJoint(){
+        return null;
     }
     /**
      *-説明文、氏名、学生証、日付
      */
-    public point getLJoint(){
-        
+    public Point getLJoint(){
+        return null;
     }
     /**
      *-説明文、氏名、学生証、日付
      */
-    private point desidePoint(){
-        
+    private Point desidePoint(){
+        return null;
     }
     /**
      *-説明文、氏名、学生証、日付
      */
-    private point desideWidth(){
-        
+    private Point desideWidth(){
+        return null;
     }
     
 }
