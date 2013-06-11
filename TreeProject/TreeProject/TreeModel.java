@@ -17,7 +17,7 @@ public class TreeModel
 	 * ブランチ群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 **/
-	private ArrayList branchs;
+	public ArrayList branchs;
 	
 	/**
 	 * ノード群の最大数を保持するフィールド。
@@ -29,7 +29,7 @@ public class TreeModel
 	 * ブランチ群の最大数を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 **/
-	private int branchsMax;
+	private int branchsMax=10;
 	
 	/**
 	 * BufferedReader自体を保持するフィールド？(誰か分かる人修正たのみます)
@@ -44,16 +44,16 @@ public class TreeModel
 	 **/
 	public int getNodesMax()
 	{
-		return 0;
+		return this.nodesMax;
 	}
 	/**
 	 *setter
 	 *NodesMaxを書き換える
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public void setNodesMax(int x)
+	public void setNodesMax(int num)
 	{
-		return;
+		this.nodesMax = num;
 	}
 	/**
  	 *getter
@@ -63,16 +63,16 @@ public class TreeModel
 	 **/
 	public int getBranchsMax()
 	{
-		return 0;
+		return this.branchsMax;
 	}
 	/**
 	 *setter
 	 *BranchsMaxの値を書き替える
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public void setBranchsMax()
+	public void setBranchsMax(int num)
 	{
-		return;
+		this.branchsMax = num;
 	}
 	/**
 	 *getter
@@ -81,8 +81,39 @@ public class TreeModel
 	 **/
 	public TreeNode getNodes(int index)
 	{
-		return null;
+		return (TreeNode)nodes.get(index);
 	}
+	/**
+	 *setter
+	 *Nodesのindex番目のnodeを返す
+	 *松きり坊主 144542 2013/6/11
+	 **/
+	
+	public void setNodes(int index,TreeNode node)
+	{
+		nodes.set(index,node);
+		
+	}
+	/**
+	 *getter
+	 *Branchsのindex番目のnodeを返す
+	 *松きり坊主 144542 2013/6/3
+	 **/
+	public TreeBranch getBranchs(int index)
+	{
+		return (TreeBranch)branchs.get(index);
+	}
+	/**
+	 *setter
+	 *Branchsのindex番目のnodeを返す
+	 *松きり坊主 144542 2013/6/11
+	 **/
+	
+	public void setBranchs(int index,TreeBranch branch)
+	{
+		branchs.set(index,branch);
+	}
+	
 	/**
 	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
 	 *松きり坊主 144542 2013/6/3
@@ -109,24 +140,24 @@ public class TreeModel
 		try
 		{
 			
-			FileReader fr = new FileReader(fileName);
+			FileReader fr = new FileReader("/Users/koyamatakayuki/SE/treeRepository/Tree/TreeProject/TreeProject/tree.txt");
 			BufferedReader br = new BufferedReader(fr);
-			
-			String aBuffer;
-			String aString = br.readLine();
+			String aString = new String();
 			
 			while(aString != null) {
-				aBuffer = aString;
-				aString = br.readLine();
 				
-				System.out.println("aBuffer: " + aBuffer + " aString: " + aString);
+				if(aString.equals("branches:")){
+					br.mark(1);
+					br = this.inputBranch(br);
+				}				
+				aString = br.readLine();				
+				System.out.println(" aString: " + aString);
 			}		
 			
 		} catch (IOException e)
 		{
 			System.out.println(e);
 		}
-		return;
 	}
 	/**
 	 *Nodeの情報をファイルから読む
@@ -140,21 +171,35 @@ public class TreeModel
 	 *Branchの情報をファイルから読む
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	public ArrayList<TreeBranch> inputBranch(BufferedReader br)
+	private BufferedReader inputBranch(BufferedReader br)
 	{
-		int a,b;
-		br.reset();
-		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>(this.branchsMax);
+		int parentNum,childNum;
+		TreeBranch branch = null;
+		String aString = null;
+		String[] aStrings = null;
+		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>();
+		try
+		{
 
-		for(TreeBranch i: branchdate){
-			String aString = br.readLine(); 
-			Stiring aStrings[] = aString.split(", ");
-			a = Integer.parseInt(aString[0]);
-			b = Integer.parseInt(aString[1]);
-			i.setParent(a);
-			i.setChild(b);
-		}
-		return branchdate;
+			br.reset();
+			aString = br.readLine(); 
+			while(aString !=null)
+			{
+				aStrings = aString.split(", ");
+				parentNum = Integer.parseInt(aStrings[0]);
+				childNum = Integer.parseInt(aStrings[1]);
+				//	debugMessage			System.out.println("debug message Integer value a"+a);
+				//	debugMessage			System.out.println("debug message Integer value b"+b);
+				branch = new TreeBranch(parentNum,childNum);
+				branchdate.add(branch);
+				aString = br.readLine(); 
+			}
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}	
+		this.branchs = branchdate;
+		return br;
 	}
 	/**
 	 *View,Controllerに報告する.

@@ -11,7 +11,7 @@ public class TreeBranch{
 	 *
 	 *
      **/
-    private int parent;
+    public int parent;
     
     /**
 	 *
@@ -37,11 +37,12 @@ public class TreeBranch{
      * TreeBranchのコンストラクタ。
 	 *
      **/
-    public TreeBranch()
+    TreeBranch(int parentNum,int childNum)
     {
-        
+		this.parent = parentNum;
+		this.child = childNum;
     }
-    
+	
     
     
     /**
@@ -71,6 +72,14 @@ public class TreeBranch{
         return 0;
     }
     
+	/**
+	 *
+	 *
+     **/
+    public void setParent(int num)
+    {
+		this.parent = num;
+    }
     /**
 	 *
 	 *
@@ -79,5 +88,14 @@ public class TreeBranch{
     {
         return 0;
     }
+	/**
+	 *
+	 *
+     **/
+    public void setChild(int num)
+    {
+		this.child = num;
+    }
+	
     
 }
