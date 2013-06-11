@@ -38,46 +38,45 @@ public class TreeModel
 	private BufferedReader in;
 	
 	/**
-	 *getter
-	 *NodesMaxの値を返す
-	 *松きり坊主 144542 2013/6/3
+	 * getter
+	 * NodesMaxの値を返す
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public int getNodesMax()
 	{
 		return this.nodesMax;
 	}
 	/**
-	 *setter
-	 *NodesMaxを書き換える
-	 *松きり坊主 144542 2013/6/3
+	 * setter
+	 * NodesMaxを書き換える
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public void setNodesMax(int num)
 	{
 		this.nodesMax = num;
 	}
 	/**
- 	 *getter
-	 *BranchsMaxの値を返す。
-	 *松きり坊主 144542 2013/6/3
-	 *
+ 	 * getter
+	 * BranchsMaxの値を返す。
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public int getBranchsMax()
 	{
 		return this.branchsMax;
 	}
 	/**
-	 *setter
-	 *BranchsMaxの値を書き替える
-	 *松きり坊主 144542 2013/6/3
+	 * setter
+	 * BranchsMaxの値を書き替える
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public void setBranchsMax(int num)
 	{
 		this.branchsMax = num;
 	}
 	/**
-	 *getter
-	 *Nodesのindex番目のnodeを返す
-	 *松きり坊主 144542 2013/6/3
+	 * getter
+	 * Nodesのindex番目のnodeを返す
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public TreeNode getNodes(int index)
 	{
@@ -123,55 +122,57 @@ public class TreeModel
 		return;
 	}
 	/**
-	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
-	 *アニメーションにする
-	 *松きり坊主 144542 2013/6/3
+	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
+	 * アニメーションにする
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public void animationTree()
 	{
 		return;
 	}
 	/**
-	 *ファイルからそれぞれの情報を読み取る
-	 *松きり坊主 144542 2013/6/3
+	 * ファイルからそれぞれの情報を読み取る
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public void inputTree(String fileName)
 	{
+		
 		try
 		{
 			
 			FileReader fr = new FileReader("/Users/koyamatakayuki/SE/treeRepository/Tree/TreeProject/TreeProject/tree.txt");
 			BufferedReader br = new BufferedReader(fr);
 			String aString = new String();
-			
-			while(aString != null) {
-				
-				if(aString.equals("branches:")){
-					br.mark(1);
-					br = this.inputBranch(br);
-				}				
+	
+			while(br.ready()) {
 				aString = br.readLine();				
 				System.out.println(" aString: " + aString);
+				
+				//if(aString.equals("Nodes:")){}をここに作る
+				if(aString.equals("branches:")){
+					this.inputBranch(br);
+				}				
+				
 			}		
-			
 		} catch (IOException e)
 		{
 			System.out.println(e);
-		}
+		}	
+		
 	}
 	/**
-	 *Nodeの情報をファイルから読む
-	 *松きり坊主 144542 2013/6/3
+	 * Nodeの情報をファイルから読む
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public TreeNode inputNode(BufferedReader br)
 	{
 		return null;
 	}
 	/**
-	 *Branchの情報をファイルから読む
-	 *松きり坊主 144542 2013/6/3
+	 * Branchの情報をファイルから読む
+	 * 松きり坊主 144542 2013/6/3
 	 **/
-	private BufferedReader inputBranch(BufferedReader br)
+	private void inputBranch(BufferedReader br)
 	{
 		int parentNum,childNum;
 		TreeBranch branch = null;
@@ -181,37 +182,33 @@ public class TreeModel
 		try
 		{
 
-			br.reset();
-			aString = br.readLine(); 
-			while(aString !=null)
+			while(br.ready())
 			{
+				aString = br.readLine(); 
 				aStrings = aString.split(", ");
 				parentNum = Integer.parseInt(aStrings[0]);
 				childNum = Integer.parseInt(aStrings[1]);
 				//	debugMessage			System.out.println("debug message Integer value a"+a);
 				//	debugMessage			System.out.println("debug message Integer value b"+b);
-				branch = new TreeBranch(parentNum,childNum);
-				branchdate.add(branch);
-				aString = br.readLine(); 
+				branchdate.add(new TreeBranch(parentNum,childNum));
 			}
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		}	
 		this.branchs = branchdate;
-		return br;
 	}
 	/**
-	 *View,Controllerに報告する.
-	 *松きり坊主 144542 2013/6/3
+	 * View,Controllerに報告する.
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public void change()
 	{
 		return;
 	}
 	/**
-	 *描画する。
-	 *松きり坊主 144542 2013/6/3
+	 * 描画する。
+	 * 松きり坊主 144542 2013/6/3
 	 **/
 	public void picture()
 	{

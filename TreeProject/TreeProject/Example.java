@@ -9,6 +9,5 @@ public class Example {
 		a.inputTree("aaaa");
 		k = (TreeBranch)a.branchs.get(1);
 		System.out.println(k.parent);
-		
 	}
 }
