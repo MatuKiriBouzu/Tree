@@ -170,7 +170,7 @@ public class TreeModel extends mvc.Model
 		int distanceX = 20;//Node間隔を定義
 		//FontMetrics fo=null;
 		//int nextPointX = fo.stringWidth(node.getDate());//文字列分ピクセルを開けたかったが失敗。後回し
-		int nextPointX = pointX + 100;//階層間距離←→
+		int nextPointX = pointX + 150;//階層間距離←→
 		int childCount = 0;
 		int sumY=0;//子ノードのY座標を貯める
 		int pointY;//最終Y座標
@@ -200,7 +200,7 @@ public class TreeModel extends mvc.Model
 		if(childCount==0)//子ノードがなければ
 		{
 			pointY = countUpY;
-			countUpY += 20;//Nodeの縦の並列間隔を定義,定数化するべき
+			countUpY += 15;//Nodeの縦の並列間隔を定義,定数化するべき
 		}
 		else
 		{
@@ -292,10 +292,8 @@ public class TreeModel extends mvc.Model
 				aStrings = aString.split(", ");
 				number = Integer.parseInt(aStrings[0]);
 				word = (aStrings[1]);
-				//	debugMessage			
-				System.out.println("debug message String value number: "+number);
-				//	debugMessage			
-				System.out.println("debug message Integer value word: "+word);
+				//	debugMessage			System.out.println("debug message String value number: "+number);
+				//	debugMessage			System.out.println("debug message Integer value word: "+word);
 				nodedate.add(new TreeNode(number,word));
 				nodesMax++;
 			}
@@ -326,9 +324,7 @@ public class TreeModel extends mvc.Model
 				aStrings = aString.split(", ");
 				parentNum = Integer.parseInt(aStrings[0]);
 				childNum = Integer.parseInt(aStrings[1]);
-				//	debugMessage			
-				System.out.println("debug message Integer value a:"+parentNum+" b:"+childNum);
-				//	debugMessage	System.out.println("debug message Integer value b:"+childNum);
+				//	debugMessage			System.out.println("debug message Integer value a:"+parentNum+" b:"+childNum);
 				branchdate.add(new TreeBranch(parentNum,childNum));
 			}
 		}catch(IOException e)

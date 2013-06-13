@@ -21,7 +21,7 @@ public class Example {
 		a.calculateTree();
 		
 		TreeView aView= new TreeView(a);
-		Dimension aDimension = new Dimension(1000,1000);
+		Dimension aDimension = new Dimension(1250,700);
 		Example.open(aView,aDimension);
 		//↑追記部分 虎谷6/13
 		
