@@ -7,6 +7,7 @@ public class Example {
 		TreeModel a = new TreeModel();
 		TreeBranch k = null;
 		a.inputTree("aaaa");
+		a.calculateTree();
 		k = (TreeBranch)a.branchs.get(1);
 		System.out.println(k.parent);
 	}

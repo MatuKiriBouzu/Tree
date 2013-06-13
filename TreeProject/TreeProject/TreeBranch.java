@@ -8,14 +8,12 @@ public class TreeBranch{
      **/
     
     /**
-	 *
-	 *
+	 * 親ノードの情報
      **/
     public int parent;
     
     /**
-	 *
-	 *
+	 * 子ノードの情報
      **/
     private int child;
     
@@ -81,12 +79,11 @@ public class TreeBranch{
 		this.parent = num;
     }
     /**
-	 *
-	 *
+	 * getter 虎谷　6/13
      **/
     public int getChild()
     {
-        return 0;
+        return child;
     }
 	/**
 	 *

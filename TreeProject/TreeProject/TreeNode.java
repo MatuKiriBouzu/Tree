@@ -5,26 +5,22 @@ import java.awt.Point;
 public class TreeNode{
 	
 	/**
-	 *
-	 *
+	 * 単語データ
 	 **/
     String date;
 	
 	/**
-	 *
-	 *
+	 * 単語ナンバー
 	 **/
     int number;
 	
 	/**
-	 *
-	 *
+	 * 配置座標
 	 **/
     Point target;
 	
 	/**
-	 *
-	 *
+	 * 階層
 	 **/
     int level;
 	
@@ -48,11 +44,11 @@ public class TreeNode{
     }
 	
     /**
-     *-説明文、氏名、学生証、日付
+     * getter 虎谷　6/13
      **/
     public int getNumber()
     {
-		return 0;   
+		return number;   
     }
 	
     /**

@@ -10,20 +10,22 @@ public class TreeModel
 	/**
 	 * ノード群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
+	 * <TreeNode>を書き足し　虎谷　6/13
 	 **/
-	private ArrayList nodes;
+	private ArrayList<TreeNode> nodes;
 	
 	/**
 	 * ブランチ群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
+	 * <TreeBranch>を書き足し　虎谷　6/13
 	 **/
-	public ArrayList branchs;
+	public ArrayList<TreeBranch> branchs;
 	
 	/**
 	 * ノード群の最大数を保持するフィールド。
 	 * DeuchiShin 144849 6/10 記述
 	 **/
-	private int nodesMax;
+	private int nodesMax=0;
 	
 	/**
 	 * ブランチ群の最大数を保持するフィールド。
@@ -114,18 +116,59 @@ public class TreeModel
 	}
 	
 	/**
-	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
-	 *松きり坊主 144542 2013/6/3
+	 ***************虎谷　1回め用
+	 *トップのブランチを見つけ出す。
+	 *虎谷　6/13
 	 **/
 	public void calculateTree()
 	{
-		//distanceXinit = 20//初期配置の配置間隔を定義
-		//distanceY = 100//横方向の配置間隔、単語幅に依存
-		//↑仮定義
+		int distanceX = 20;//Node間隔を定義
+		int distanceY = 20;//Nodeの縦の並列間隔を定義
+		int temp = 20;//初回Y座標を定義
+		
+		
+		//====↓ここからトップノード探索
+		ArrayList<TreeNode> topNode = new ArrayList(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		for(TreeBranch branch : branchs)//すべてのブランチから検索
+		{
+			 for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
+			 {
+				 //System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
+				 if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+				{
+					topNode.remove(node);//トップリストから取り除く
+					//System.out.println("=削除=");
+					break;//削除が完了したら抜ける(でないとエラーが生じる)
+				}
+			 }
+		}
+		
+		for(TreeNode topnode : topNode)//トップノード表示
+		{
+			System.out.println("debugM TOP: "+topnode.getNumber());
+		}
+		//====↑ここまで
 		
 		
 		return;
 	}
+	
+	/**
+	 ***************虎谷　2回め以降用
+	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
+	 *松きり坊主 144542 2013/6/3
+	 **/
+	//public void calculateTree()
+	//{
+	//	int distanceX = 20;//Node間隔を定義
+	//	int distanceY = 20;//Nodeの縦の並列間隔を定義
+	//	int temp = 20;//初回Y座標を定義
+	//	
+	//	
+	//	
+	//	return;
+	//}
+	
 	/**
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
 	 * アニメーションにする
@@ -190,7 +233,7 @@ public class TreeModel
 		TreeNode node = null;
 		String aString = null;
 		String[] aStrings = null;
-		ArrayList<TreeNode> nodeDate = new ArrayList<TreeNode>();
+		ArrayList<TreeNode> nodedate = new ArrayList<TreeNode>();
 		try
 		{
 			
@@ -207,13 +250,14 @@ public class TreeModel
 				System.out.println("debug message String value number: "+number);
 				//	debugMessage			
 				System.out.println("debug message Integer value word: "+word);
-				nodeDate.add(new TreeNode(number,word));
+				nodedate.add(new TreeNode(number,word));
+				nodesMax++;
 			}
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		}	
-		this.nodes = nodeDate;
+		this.nodes = nodedate;
 	}
 	
 	/**
