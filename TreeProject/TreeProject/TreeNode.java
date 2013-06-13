@@ -36,6 +36,17 @@ public class TreeNode{
         return null;
     }
 	
+	/**
+     * TreeBranchのコンストラクタ。
+	 *　引数よりTreeNodeを作成する
+	 * 虎谷　144858 2013/6/13　動作確認まで
+     **/
+    TreeNode(int number,String word)
+    {
+		this.number = number;
+		this.date = word;
+    }
+	
     /**
      *-説明文、氏名、学生証、日付
      **/

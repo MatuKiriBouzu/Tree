@@ -119,6 +119,11 @@ public class TreeModel
 	 **/
 	public void calculateTree()
 	{
+		//distanceXinit = 20//初期配置の配置間隔を定義
+		//distanceY = 100//横方向の配置間隔、単語幅に依存
+		//↑仮定義
+		
+		
 		return;
 	}
 	/**
@@ -133,6 +138,7 @@ public class TreeModel
 	/**
 	 * ファイルからそれぞれの情報を読み取る
 	 * 松きり坊主 144542 2013/6/3
+	 * 虎谷 144858 2013/6/13node部　動作確認まで
 	 **/
 	public void inputTree(String fileName)
 	{
@@ -140,7 +146,10 @@ public class TreeModel
 		try
 		{
 			
-			FileReader fr = new FileReader("/Users/koyamatakayuki/SE/treeRepository/Tree/TreeProject/TreeProject/tree.txt");
+			//FileReader fr = new FileReader("/Users/torataniakira/SE/treeRepository/Tree/TreeProject/TreeProject/tree.txt");
+			FileReader fr = new FileReader("./TreeProject/tree.txt");
+			//相対パスに設定
+			
 			BufferedReader br = new BufferedReader(fr);
 			String aString = new String();
 	
@@ -148,8 +157,13 @@ public class TreeModel
 				aString = br.readLine();				
 				System.out.println(" aString: " + aString);
 				
-				//if(aString.equals("Nodes:")){}をここに作る
-				if(aString.equals("branches:")){
+				if(aString.equals("nodes:"))
+				{
+					this.inputNode(br);
+				}
+				
+				if(aString.equals("branches:"))
+				{
 					this.inputBranch(br);
 				}				
 				
@@ -163,11 +177,42 @@ public class TreeModel
 	/**
 	 * Nodeの情報をファイルから読む
 	 * 松きり坊主 144542 2013/6/3
+	 * 虎谷 144858 2013/6/13動作確認まで
 	 **/
-	public TreeNode inputNode(BufferedReader br)
+	public void inputNode(BufferedReader br)
+	//返り値をTreeNodeからvoidに変更6/13
 	{
-		return null;
+		int number;
+		String word;
+		TreeNode node = null;
+		String aString = null;
+		String[] aStrings = null;
+		ArrayList<TreeNode> nodeDate = new ArrayList<TreeNode>();
+		try
+		{
+			
+			while(br.ready())
+			{
+				aString = br.readLine(); 
+				
+				if(aString.equals("branches:"))break;
+				
+				aStrings = aString.split(", ");
+				number = Integer.parseInt(aStrings[0]);
+				word = (aStrings[1]);
+				//	debugMessage			
+				System.out.println("debug message String value number: "+number);
+				//	debugMessage			
+				System.out.println("debug message Integer value word: "+word);
+				nodeDate.add(new TreeNode(number,word));
+			}
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}	
+		this.nodes = nodeDate;
 	}
+	
 	/**
 	 * Branchの情報をファイルから読む
 	 * 松きり坊主 144542 2013/6/3
@@ -188,8 +233,10 @@ public class TreeModel
 				aStrings = aString.split(", ");
 				parentNum = Integer.parseInt(aStrings[0]);
 				childNum = Integer.parseInt(aStrings[1]);
-				//	debugMessage			System.out.println("debug message Integer value a"+a);
-				//	debugMessage			System.out.println("debug message Integer value b"+b);
+				//	debugMessage			
+				System.out.println("debug message Integer value a"+parentNum);
+				//	debugMessage			
+				System.out.println("debug message Integer value b"+childNum);
 				branchdate.add(new TreeBranch(parentNum,childNum));
 			}
 		}catch(IOException e)
