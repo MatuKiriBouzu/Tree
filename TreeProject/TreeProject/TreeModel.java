@@ -160,12 +160,15 @@ public class TreeModel
 				if(aString.equals("nodes:"))
 				{
 					this.inputNode(br);
+					this.inputBranch(br);
+					//↑おかしいのはわかってるけど、Nodeでbranches:を読み取ったから↓の条件に引っかからないため
+					//暫定的にこのように記述
 				}
 				
-				if(aString.equals("branches:"))
-				{
-					this.inputBranch(br);
-				}				
+				//if(aString.equals("branches:"))
+				//{
+				//	this.inputBranch(br);
+				//}				
 				
 			}		
 		} catch (IOException e)
@@ -234,9 +237,8 @@ public class TreeModel
 				parentNum = Integer.parseInt(aStrings[0]);
 				childNum = Integer.parseInt(aStrings[1]);
 				//	debugMessage			
-				System.out.println("debug message Integer value a"+parentNum);
-				//	debugMessage			
-				System.out.println("debug message Integer value b"+childNum);
+				System.out.println("debug message Integer value a:"+parentNum+" b:"+childNum);
+				//	debugMessage	System.out.println("debug message Integer value b:"+childNum);
 				branchdate.add(new TreeBranch(parentNum,childNum));
 			}
 		}catch(IOException e)
