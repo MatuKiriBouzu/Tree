@@ -62,12 +62,12 @@ public class TreeBranch{
     }
     
     /**
-	 *
+	 * getter 虎谷　6/13
 	 *
      **/
     public int getParent()
     {
-        return 0;
+        return this.parent;
     }
     
 	/**
@@ -83,7 +83,7 @@ public class TreeBranch{
      **/
     public int getChild()
     {
-        return child;
+        return this.child;
     }
 	/**
 	 *

@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.awt.FontMetrics;
+import java.awt.Point;
 
-public class TreeModel
+public class TreeModel extends mvc.Model
 {
+	
 	/**
 	 * ノード群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
-	 * <TreeNode>を書き足し　虎谷　6/13
+	 * <TreeNode>とpublicを書き足し　虎谷　6/13
 	 **/
-	private ArrayList<TreeNode> nodes;
+	public ArrayList<TreeNode> nodes;
 	
 	/**
 	 * ブランチ群自体を保持するフィールド。
@@ -38,6 +41,12 @@ public class TreeModel
 	 * DeguchiShin 144849 6/10 仮記述
 	 **/
 	private BufferedReader in;
+	/**
+	 * Yの作画位置を次々下げてゆくために使用
+	 * 虎谷 6/13
+	 **/
+	private int countUpY=20;
+	
 	
 	/**
 	 * getter
@@ -124,7 +133,6 @@ public class TreeModel
 	{
 		int distanceX = 20;//Node間隔を定義
 		int distanceY = 20;//Nodeの縦の並列間隔を定義
-		int temp = 20;//初回Y座標を定義
 		
 		
 		//====↓ここからトップノード探索
@@ -142,32 +150,70 @@ public class TreeModel
 				}
 			 }
 		}
-		
 		for(TreeNode topnode : topNode)//トップノード表示
 		{
 			System.out.println("debugM TOP: "+topnode.getNumber());
+			calculateTree(topnode,20);
 		}
 		//====↑ここまで
-		
-		
+	
 		return;
 	}
-	
+	int count=0;
 	/**
 	 ***************虎谷　2回め以降用
 	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	//public void calculateTree()
-	//{
-	//	int distanceX = 20;//Node間隔を定義
-	//	int distanceY = 20;//Nodeの縦の並列間隔を定義
-	//	int temp = 20;//初回Y座標を定義
-	//	
-	//	
-	//	
-	//	return;
-	//}
+	public void calculateTree(TreeNode node,int pointX)//(自ノードの)最終X座標
+	{
+		int distanceX = 20;//Node間隔を定義
+		//FontMetrics fo=null;
+		//int nextPointX = fo.stringWidth(node.getDate());//文字列分ピクセルを開けたかったが失敗。後回し
+		int nextPointX = pointX + 100;//階層間距離←→
+		int childCount = 0;
+		int sumY=0;//子ノードのY座標を貯める
+		int pointY;//最終Y座標
+		
+		//if(node.getNumber()==20){
+		//	System.out.println("#:"+node.getNumber());  //デバグ
+		//}
+		
+		for(TreeBranch branch : branchs)
+		{
+			
+			if(branch.getParent()==node.getNumber())
+			{
+				
+				childCount++;
+				TreeNode childNode = nodes.get(branch.getChild()-1);//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
+				
+				//if(branch.getChild()==20){
+				//	System.out.println("*20*");
+				//}
+				//System.out.println("*:"+branch.getChild());//　　　デバグ
+				
+				calculateTree(childNode,nextPointX);
+				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
+			}
+		}
+		if(childCount==0)//子ノードがなければ
+		{
+			pointY = countUpY;
+			countUpY += 20;//Nodeの縦の並列間隔を定義,定数化するべき
+		}
+		else
+		{
+			pointY =(int)sumY/childCount;
+		}
+			
+		node.setTarget(new Point(pointX,pointY));
+		
+		//count++;    //デバグ
+		//System.out.println("=確認=:"+node.getDate()+" \t\tcount:"+count+"  POINT:"+pointX+" "+pointY);
+		
+		return;
+	}
 	
 	/**
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
@@ -302,9 +348,11 @@ public class TreeModel
 	/**
 	 * 描画する。
 	 * 松きり坊主 144542 2013/6/3
+	 * 虎谷 6/13 暫定削除
 	 **/
-	public void picture()
-	{
-		return;
-	}
+	//public void picture()
+	//{
+	//	return;
+	//}
+	
 }

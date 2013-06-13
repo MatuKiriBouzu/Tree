@@ -25,11 +25,11 @@ public class TreeNode{
     int level;
 	
     /**
-     *-説明文、氏名、学生証、日付
+     *-getter 虎谷　6/13
      **/
     public String getDate()
     {
-        return null;
+        return date;
     }
 	
 	/**
@@ -52,11 +52,11 @@ public class TreeNode{
     }
 	
     /**
-     *-説明文、氏名、学生証、日付
+     * getter 虎谷　6/13
      **/
     public Point getTarget()
     {
-		return null;   
+		return target;   
     }
 	
     /**
@@ -93,6 +93,14 @@ public class TreeNode{
      **/
     private Point desideWidth(){
         return null;
+    }
+	/**
+     *-setter
+	 * 虎谷　6/13　追加
+     **/
+	public void setTarget(Point point)
+    {
+		this.target = point;
     }
     
 }

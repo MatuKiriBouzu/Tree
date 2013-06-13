@@ -10,7 +10,7 @@ public class TreeController extends mvc.Controller{
 	 */
 	public TreeController() 
 	{
-		
+		super();
 	}
 	
 	/**
