@@ -178,13 +178,12 @@ public class TreeModel extends mvc.Model
 		//if(node.getNumber()==20){
 		//	System.out.println("#:"+node.getNumber());  //デバグ
 		//}
-		
+		ArrayList<TreeBranch> afterBranchs = new ArrayList<TreeBranch>();//自ノードのY座標が後で求まるので、一旦格納する
 		for(TreeBranch branch : branchs)
 		{
 			
 			if(branch.getParent()==node.getNumber())
 			{
-				
 				childCount++;
 				TreeNode childNode = nodes.get(branch.getChild()-1);//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
 				
@@ -195,6 +194,11 @@ public class TreeModel extends mvc.Model
 				
 				calculateTree(childNode,nextPointX);
 				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
+				
+				//branch.decideChildPx(new Point(nextPointX,(int)childNode.getTarget().getY()));
+				afterBranchs.add(branch);
+				
+
 			}
 		}
 		if(childCount==0)//子ノードがなければ
@@ -208,9 +212,13 @@ public class TreeModel extends mvc.Model
 		}
 			
 		node.setTarget(new Point(pointX,pointY));
-		
 		//count++;    //デバグ
 		//System.out.println("=確認=:"+node.getDate()+" \t\tcount:"+count+"  POINT:"+pointX+" "+pointY);
+		
+		//for(TreeBranch branch : afterBranchs)
+		//{
+		//	branch.decideParentPx(new Point(nextPointX-10,pointY));
+		//}
 		
 		return;
 	}
