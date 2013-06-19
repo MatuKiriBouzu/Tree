@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.awt.FontMetrics;
 import java.awt.Point;
 
 public class TreeModel extends mvc.Model
@@ -168,9 +167,8 @@ public class TreeModel extends mvc.Model
 	public void calculateTree(TreeNode node,int pointX)//(自ノードの)最終X座標
 	{
 		int distanceX = 20;//Node間隔を定義
-		//FontMetrics fo=null;
-		//int nextPointX = fo.stringWidth(node.getDate());//文字列分ピクセルを開けたかったが失敗。後回し
-		int nextPointX = pointX + 150;//階層間距離←→
+		
+		int nextPointX = pointX + (node.getDate().length())*9 + 25;//階層間距離←→
 		int childCount = 0;
 		int sumY=0;//子ノードのY座標を貯める
 		int pointY;//最終Y座標
@@ -204,7 +202,7 @@ public class TreeModel extends mvc.Model
 		if(childCount==0)//子ノードがなければ
 		{
 			pointY = countUpY;
-			countUpY += 15;//Nodeの縦の並列間隔を定義,定数化するべき
+			countUpY += 16;//Nodeの縦の並列間隔を定義,定数化するべき
 		}
 		else
 		{
@@ -212,15 +210,28 @@ public class TreeModel extends mvc.Model
 		}
 			
 		node.setTarget(new Point(pointX,pointY));
+		
+		
 		//count++;    //デバグ
 		//System.out.println("=確認=:"+node.getDate()+" \t\tcount:"+count+"  POINT:"+pointX+" "+pointY);
 		
-		//for(TreeBranch branch : afterBranchs)
-		//{
-		//	branch.decideParentPx(new Point(nextPointX-10,pointY));
-		//}
+		
 		
 		return;
+	}
+	
+	
+	public void branchCalc(){
+		for(TreeBranch branch : branchs)
+		{
+			int p1 = (int)(nodes.get(branch.getParent()-1).getTarget().getX());
+			int p2 = (int)(nodes.get(branch.getParent()-1).desideWidth().getX());
+			int p3 = (int)(nodes.get(branch.getParent()-1).desideWidth().getY());
+			int c1 = (int)(nodes.get(branch.getChild()-1).getTarget().getX());
+			int c2 = (int)(nodes.get(branch.getChild()-1).desideWidth().getY());
+			branch.decideParentP(new Point(p1 + p2 , p3));
+			branch.decideChildP(new Point(c1 , c2));
+		}
 	}
 	
 	/**

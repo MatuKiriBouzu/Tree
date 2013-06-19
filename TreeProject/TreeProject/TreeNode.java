@@ -1,7 +1,9 @@
 package TreeProject;
 
 import java.awt.Point;
-
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;//文字列幅を取得するために必要
 public class TreeNode{
 	
 	/**
@@ -88,11 +90,20 @@ public class TreeNode{
         return null;
     }
 	
-    /**
-     *-説明文、氏名、学生証、日付
+
+	/**
+     *-setter 文字列長さ　虎谷　6/18
      **/
-    private Point desideWidth(){
-        return null;
+    public Point desideWidth(){//Graphics g){
+		//System.out.println("=確認=");
+		//Font f=new Font("Monospaced",Font.PLAIN,12);
+		//System.out.println("=確認=");
+		//FontMetrics fm=g.getFontMetrics(f);
+		//System.out.println("=="+fm.stringWidth(date));
+		//Point point = new Point(fm.stringWidth(date),(int)target.getY()-5);//定数9
+		Point point = new Point((date.length())*8,(int)target.getY()-5);//定数8
+		
+        return point;
     }
 	/**
      *-setter

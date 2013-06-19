@@ -18,16 +18,16 @@ public class TreeBranch{
     private int child;
     
     /**
-	 *
+	 * 親ノードの接続位置情報
 	 *
      **/
-    private Point parentPx;
+    private Point parentP;
     
     /**
-	 *
+	 * 子ノードの接続位置情報
 	 *
      **/
-    private Point childPx;
+    private Point childP;
     
     
     
@@ -44,26 +44,28 @@ public class TreeBranch{
     
     
     /**
-     * 
-	 *
+     * 親ノードの接続地点を決定
+	 * 虎谷 6/19
      **/
-    public void decideParentPx()
+    public void decideParentP(Point point)
     {
+        parentP = point;
+		return;
+    }
+    
+	/**
+     * 子ノードの接続地点を決定
+	 * 虎谷 6/19
+     **/
+    public void decideChildP(Point point)
+    {
+		childP = point;
         return;
     }
     
     /**
-	 *
-	 *
-     **/
-    public void decideChildPx()
-    {
-        return;
-    }
-    
-    /**
-	 * getter 虎谷　6/13
-	 *
+	 * 親ノードgetter
+	 * 虎谷　6/13
      **/
     public int getParent()
     {
@@ -79,7 +81,8 @@ public class TreeBranch{
 		this.parent = num;
     }
     /**
-	 * getter 虎谷　6/13
+	 * 子ノードgetter
+	 * 虎谷　6/13
      **/
     public int getChild()
     {
@@ -92,6 +95,16 @@ public class TreeBranch{
     public void setChild(int num)
     {
 		this.child = num;
+    }
+	
+	//======追加分↓=====虎谷 6/19
+	public Point getParentP()
+    {
+        return this.parentP;
+    }
+	public Point getChildP()
+    {
+        return this.childP;
     }
 	
     

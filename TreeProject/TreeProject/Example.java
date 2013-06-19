@@ -19,6 +19,7 @@ public class Example {
 		TreeBranch k = null;
 		a.inputTree("aaaa");
 		a.calculateTree();
+		a.branchCalc();
 		
 		TreeView aView= new TreeView(a);
 		Dimension aDimension = new Dimension(1250,700);
