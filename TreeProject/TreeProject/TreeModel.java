@@ -164,18 +164,14 @@ public class TreeModel extends mvc.Model
 	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
 	 *松きり坊主 144542 2013/6/3
 	 **/
+	int distanceX = 25;//Node間隔を定義//階層間距離←→
 	public void calculateTree(TreeNode node,int pointX)//(自ノードの)最終X座標
 	{
-		int distanceX = 20;//Node間隔を定義
-		
-		int nextPointX = pointX + (node.getDate().length())*9 + 25;//階層間距離←→
+		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
 		int childCount = 0;
 		int sumY=0;//子ノードのY座標を貯める
-		int pointY;//最終Y座標
-		
-		//if(node.getNumber()==20){
-		//	System.out.println("#:"+node.getNumber());  //デバグ
-		//}
+		int pointY = countUpY;//最終Y座標 (初期値カウントアップYの数値)
+		//paint(pointX,pointY)
 		ArrayList<TreeBranch> afterBranchs = new ArrayList<TreeBranch>();//自ノードのY座標が後で求まるので、一旦格納する
 		for(TreeBranch branch : branchs)
 		{
@@ -185,37 +181,27 @@ public class TreeModel extends mvc.Model
 				childCount++;
 				TreeNode childNode = nodes.get(branch.getChild()-1);//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
 				
-				//if(branch.getChild()==20){
-				//	System.out.println("*20*");
-				//}
-				//System.out.println("*:"+branch.getChild());//　　　デバグ
-				
 				calculateTree(childNode,nextPointX);
 				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
 				
-				//branch.decideChildPx(new Point(nextPointX,(int)childNode.getTarget().getY()));
 				afterBranchs.add(branch);
 				
 
 			}
 		}
+		//========↓Y座標決定処理↓=========
 		if(childCount==0)//子ノードがなければ
 		{
-			pointY = countUpY;
 			countUpY += 16;//Nodeの縦の並列間隔を定義,定数化するべき
 		}
-		else
+		else//子ノードがあればそれらの座標から自ノードの座標を決定する
 		{
 			pointY =(int)sumY/childCount;
+			//paint(pointX,pointY)
 		}
+		//========↑===========↑========
 			
 		node.setTarget(new Point(pointX,pointY));
-		
-		
-		//count++;    //デバグ
-		//System.out.println("=確認=:"+node.getDate()+" \t\tcount:"+count+"  POINT:"+pointX+" "+pointY);
-		
-		
 		
 		return;
 	}
@@ -238,15 +224,115 @@ public class TreeModel extends mvc.Model
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
 	 * アニメーションにする
 	 * 松きり坊主 144542 2013/6/3
+	 * 削除予定。トップノード探索の後、アニメーションツリーに引き継ぎ 6/20　虎谷
 	 **/
 	public void animationTree()
 	{
+		int distanceX = 20;//Node間隔を定義
+		int distanceY = 20;//Nodeの縦の並列間隔を定義
+		
+		
+		//====↓ここからトップノード探索
+		ArrayList<TreeNode> topNode = new ArrayList(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		for(TreeBranch branch : branchs)//すべてのブランチから検索
+		{
+			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
+			{
+				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
+				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+				{
+					topNode.remove(node);//トップリストから取り除く
+					//System.out.println("=削除=");
+					break;//削除が完了したら抜ける(でないとエラーが生じる)
+				}
+			}
+		}
+		for(TreeNode topnode : topNode)//トップノード表示
+		{
+			System.out.println("debugM TOP: "+topnode.getNumber());
+			animationTree(topnode,20);
+		}
+		//====↑ここまで
+		
+		return;
+	}	
+	/**
+	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
+	 * アニメーションにする
+	 * 松きり坊主 144542 2013/6/3
+	 * 定義する。間々に内部変更通知を出すようにして、viewに伝え、0.5秒待つ処理を組み込み済み 6/20 虎谷
+	 **/
+	public void animationTree(TreeNode node,int pointX)//(自ノードの)最終X座標
+	{
+		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
+		int childCount = 0;
+		int sumY=0;//子ノードのY座標を貯める
+		int pointY = countUpY;//最終Y座標 (初期値カウントアップYの数値)
+		
+		node.setTarget(new Point(pointX,pointY));//暫定配置、子ノードがあれば後に再配置する
+		//paint(pointX,pointY)
+		//==========↓作画処理一度目↓===========
+		try{
+			branchCalc();
+			changed();
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("=確認1S=");
+		//==========↑作画処理一度目↑===========
+		
+		
+		ArrayList<TreeBranch> afterBranchs = new ArrayList<TreeBranch>();//自ノードのY座標が後で求まるので、一旦格納する
+		for(TreeBranch branch : branchs)
+		{
+			
+			if(branch.getParent()==node.getNumber())
+			{
+				childCount++;
+				TreeNode childNode = nodes.get(branch.getChild()-1);//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
+				
+				animationTree(childNode,nextPointX);
+				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
+				
+				afterBranchs.add(branch);
+				
+				
+			}
+		}
+		//========↓Y座標決定処理↓=========
+		if(childCount==0)//子ノードがなければ
+		{
+			countUpY += 16;//Nodeの縦の並列間隔を定義,定数化するべき
+			node.setTarget(new Point(pointX,pointY));
+		}
+		else//子ノードがあればそれらの座標から自ノードの座標を決定する
+		{
+			pointY =(int)sumY/childCount;
+			node.setTarget(new Point(pointX,pointY));
+			
+			try{
+				branchCalc();
+				changed();
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("=確認2S="+node.getDate());
+		}
+		//========↑===========↑========
+		
+		
+		
 		return;
 	}
+
+	
 	/**
 	 * ファイルからそれぞれの情報を読み取る
 	 * 松きり坊主 144542 2013/6/3
 	 * 虎谷 144858 2013/6/13node部　動作確認まで
+	 * 追記　虎谷 6/20 ノード初期位置を定義（左に立て一列に配置）
 	 **/
 	public void inputTree(String fileName)
 	{
@@ -301,7 +387,6 @@ public class TreeModel extends mvc.Model
 		ArrayList<TreeNode> nodedate = new ArrayList<TreeNode>();
 		try
 		{
-			
 			while(br.ready())
 			{
 				aString = br.readLine(); 
@@ -314,6 +399,7 @@ public class TreeModel extends mvc.Model
 				//	debugMessage			System.out.println("debug message String value number: "+number);
 				//	debugMessage			System.out.println("debug message Integer value word: "+word);
 				nodedate.add(new TreeNode(number,word));
+				nodedate.get(nodesMax).setTarget(new Point(20,nodesMax*20+10));
 				nodesMax++;
 			}
 		}catch(IOException e)
@@ -321,6 +407,7 @@ public class TreeModel extends mvc.Model
 			e.printStackTrace();
 		}	
 		this.nodes = nodedate;
+		//nodesMax = nodes.size();
 	}
 	
 	/**
@@ -355,11 +442,19 @@ public class TreeModel extends mvc.Model
 	/**
 	 * View,Controllerに報告する.
 	 * 松きり坊主 144542 2013/6/3
+	 * オーバーライドを取り消し　6/20 虎谷
 	 **/
-	public void change()
+	/*public void changed()
 	{
+		Iterator anIterator = dependents.iterator();
+		while (anIterator.hasNext())
+		{
+			TreeView aView = (TreeView)anIterator.next();
+			aView.update();
+		}
 		return;
 	}
+	
 	/**
 	 * 描画する。
 	 * 松きり坊主 144542 2013/6/3

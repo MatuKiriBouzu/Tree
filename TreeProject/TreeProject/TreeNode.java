@@ -92,7 +92,7 @@ public class TreeNode{
 	
 
 	/**
-     *-setter 文字列長さ　虎谷　6/18
+     *-setter getter 文字列長さ　虎谷　6/18
      **/
     public Point desideWidth(){
 		//System.out.println("=確認=");
@@ -103,7 +103,11 @@ public class TreeNode{
 		//FontMetrics fm= g.getFontMetrics();
 		//System.out.println("=="+fm.stringWidth(date));
 		//Point point = new Point(fm.stringWidth(date),(int)target.getY()-5);//定数9
-		Point point = new Point((date.length())*8,(int)target.getY()-5);//定数8
+		
+		Point point = new Point((date.length())*8,0);//定数8
+		if(target!=null){
+			point = new Point((date.length())*8,(int)this.target.getY()-5);//定数8
+		}
 		
         return point;
     }
