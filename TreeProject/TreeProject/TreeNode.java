@@ -94,11 +94,13 @@ public class TreeNode{
 	/**
      *-setter 文字列長さ　虎谷　6/18
      **/
-    public Point desideWidth(){//Graphics g){
+    public Point desideWidth(){
 		//System.out.println("=確認=");
+		
+		//Graphics g = new Graphics();
 		//Font f=new Font("Monospaced",Font.PLAIN,12);
 		//System.out.println("=確認=");
-		//FontMetrics fm=g.getFontMetrics(f);
+		//FontMetrics fm= g.getFontMetrics();
 		//System.out.println("=="+fm.stringWidth(date));
 		//Point point = new Point(fm.stringWidth(date),(int)target.getY()-5);//定数9
 		Point point = new Point((date.length())*8,(int)target.getY()-5);//定数8
