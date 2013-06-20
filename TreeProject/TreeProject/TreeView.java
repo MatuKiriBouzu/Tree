@@ -94,18 +94,32 @@ public class TreeView extends mvc.View
             return picture;//何も描画されてないものを返す。
         }
         aGraphics2D=picture.createGraphics();
+		
+		
         
         aGraphics2D.setBackground(Color.WHITE);
         aGraphics2D.clearRect(0,0,width,height);
         /*  aGraphics2D.setColor(Color.WHITE);//背景色設定の代わり？
 		    aGraphics2D.fillRect(0, 0, width, height);    */
         aGraphics2D.setColor(Color.BLACK);
-		for(TreeNode node : model.nodes)//オリジナル　//nodeを作画6/13虎谷
+		
+		//==============仮作成部=====================
+		for(TreeNode node : model.nodes)//オリジナル　//nodeを作画6/13虎谷 ※仮作成
 		{
 			int X = (int)node.getTarget().getX();
 			int Y = (int)node.getTarget().getY();
 			aGraphics2D.drawString(node.getDate(),X,Y);
+			aGraphics2D.drawRect(X,Y-12, (int)node.desideWidth().getX(), 14);
 		}
+		for(TreeBranch branch : model.branchs)
+		{
+			int X1 = (int)branch.getParentP().getX();
+			int Y1 = (int)branch.getParentP().getY();
+			int X2 = (int)branch.getChildP().getX();
+			int Y2 = (int)branch.getChildP().getY();
+			aGraphics2D.drawLine(X1,Y1,X2,Y2);
+		}
+		//==========================================
 		
         aGraphics2D.dispose();
 		return picture;
