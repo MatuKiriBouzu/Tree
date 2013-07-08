@@ -27,13 +27,13 @@ public class TreeModel extends mvc.Model
 	 * ノード群の最大数を保持するフィールド。
 	 * DeuchiShin 144849 6/10 記述
 	 **/
-	private int nodesMax=0;
+	private int nodesMax = 0;
 	
 	/**
 	 * ブランチ群の最大数を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 **/
-	private int branchsMax=10;
+	private int branchsMax = 10;
 	
 	/**
 	 * BufferedReader自体を保持するフィールド？(誰か分かる人修正たのみます)
@@ -44,7 +44,7 @@ public class TreeModel extends mvc.Model
 	 * Yの作画位置を次々下げてゆくために使用
 	 * 虎谷 6/13
 	 **/
-	private int countUpY=20;
+	private int countUpY = 20;
 	
 	/**
 	 * コンストラクタ、親から引き継ぎを明確化
@@ -71,6 +71,7 @@ public class TreeModel extends mvc.Model
 	public void setNodesMax(int num)
 	{
 		this.nodesMax = num;
+		return;
 	}
 	/**
  	 * getter
@@ -89,6 +90,7 @@ public class TreeModel extends mvc.Model
 	public void setBranchsMax(int num)
 	{
 		this.branchsMax = num;
+		return;
 	}
 	/**
 	 * getter
