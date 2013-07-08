@@ -16,7 +16,7 @@ public class Example {
 	public static void main(String[] args)
 	{
 		TreeModel aModel = new TreeModel();
-		TreeBranch k = null;
+		TreeBranch aBranch = null;
 		aModel.inputTree("aaaa");//view展開前に先にデータの読み込み、体裁を整えておく
 
 		
@@ -36,8 +36,8 @@ public class Example {
 		aModel.animationTree();
 		aModel.branchCalc();
 		
-		k = (TreeBranch)aModel.branchs.get(1);
-		System.out.println(k.parent);
+		aBranch = (TreeBranch)aModel.branchs.get(1);
+		System.out.println(aBranch.parent);
 	}
 	
 	private static void open(TreeView aView, Dimension aDimension)
