@@ -142,7 +142,7 @@ public class TreeModel extends mvc.Model
 		
 		
 		//====↓ここからトップノード探索
-		ArrayList<TreeNode> topNode = new ArrayList(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
 		for(TreeBranch branch : branchs)//すべてのブランチから検索
 		{
 			 for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
@@ -240,7 +240,7 @@ public class TreeModel extends mvc.Model
 		
 		
 		//====↓ここからトップノード探索
-		ArrayList<TreeNode> topNode = new ArrayList(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
 		for(TreeBranch branch : branchs)//すべてのブランチから検索
 		{
 			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
