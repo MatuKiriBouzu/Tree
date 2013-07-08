@@ -77,7 +77,8 @@ public class TreeView extends mvc.View
         super.paintComponent(aGraphics);
         treeImage=this.paintTree(aGraphics2D);
         //aGraphics.drawImage(treeImage , offset.x , offset.y ,this);
-		aGraphics.drawImage(treeImage , viewport.x , viewport.y ,this);
+		viewport=this.scrollAmount();
+		aGraphics.drawImage(treeImage , -viewport.x , -viewport.y ,this);
     }
     
     /**
