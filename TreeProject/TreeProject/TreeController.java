@@ -17,28 +17,28 @@ public class TreeController extends mvc.Controller{
 	 * TreeProjectのモデルを保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 **/
-	private TreeModel model;
+	//private TreeModel model;
 	
 	/**
 	 * TreeProjectのビューを保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 **/
-	private TreeView view;
+	//private TreeView view;
 	
 	/**
 	 * これなんでっしょ
 	 **/
-	Point previous;
+	//Point previous;
 	
 	/**
 	 * わからんです
 	 */
-	Point curent;
+	//Point curent;
 	
 	/**
 	 * マウスクリック時に応答するメソッド。
 	 * DeguchiShin 144849 6/10 スタブ作成
-	 **/
+	 **
 	public void mouseClicked()
 	{
 		return;
@@ -47,7 +47,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * マウスドラッグ時に応答するメソッド。
 	 * DeguchiShin 144849 6/10 スタブ作成
-	 **/
+	 **
 	public void mouseDragged()
 	{
 		return;
@@ -55,7 +55,7 @@ public class TreeController extends mvc.Controller{
 	
 	/**
 	 * わからんです
-	 **/
+	 **
 	public void mouseEntered()
 	{
 		return;
@@ -63,7 +63,7 @@ public class TreeController extends mvc.Controller{
 	
 	/**
 	 * わけわかめ
-	 **/
+	 **
 	public void mouseExited()
 	{
 		return;
@@ -72,7 +72,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * マウスの移動時に応答するメソッド。
 	 * DeguchiShin 144849 6/10 スタブ作成
-	 **/
+	 **
 	public void mouseMoved()
 	{
 		return;
@@ -81,7 +81,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * マウスプレス時(押し続けている状態)に応答するメソッド。
 	 * DeguchiShin 144849 6/10 スタブ作成
-	 **/
+	 **
 	public void mousePressed()
 	{
 		return;
@@ -90,7 +90,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * マウスリリース時(プレスの解除時)に応答するメソッド。
 	 * DeguchiShin 144849 6/10 スタブ作成
-	 **/
+	 **
 	public void mouseReleased()
 	{
 		return;
@@ -99,7 +99,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * mvcのモデルを設定するメソッド。
 	 * DeguchiShin 144849 6/3 スタブ作成
-	 **/
+	 **
 	public void setModel(TreeModel model)
 	{
 		return;
@@ -108,7 +108,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * mvcのビューを設定するメソッド。
 	 * DeguchiShin 144849 6/3 スタブ作成
-	 **/
+	 **
 	public void setView(TreeView view)
 	{
 		return;
@@ -117,10 +117,10 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * 自身を文字列として応答するメソッド。
 	 * DeguchiShin 144849 6/10 スタブ作成
-	 **/
+	 **
 	public void toString(String aString)
 	{
 		return;
 	}
-	
+*/	
 }

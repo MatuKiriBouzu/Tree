@@ -24,7 +24,7 @@ public class TreeView extends mvc.View
      * 情報(Node,Blanch等)を格納するモデル体を管理する変数。
      * modelからTreeModelに変更、間違っているかも6/13虎谷
      **/
-	protected TreeModel model;
+	protected TreeModel aModel;
     
     /**
      * マウスカーソルによるスクロール機能等を担当するコントローラー体を管理する変数。
@@ -58,11 +58,13 @@ public class TreeView extends mvc.View
      * コンストラクタ
      * 親で代入しているが、描画できなくなるのでもう一度上書き　間違っているかも6/13虎谷
      * コンス"トラ"クタ……"虎"谷……深夜テンション小林
+	 * 修正完了。親から帰ってきたものを型変換の上格納　7/5　虎谷
      **/
 	public TreeView(TreeModel aModel)//
 	{
 		super(aModel);
-		model = aModel;
+		this.aModel=(TreeModel)(model);
+		
 	}
 	
     /**
@@ -74,7 +76,8 @@ public class TreeView extends mvc.View
     {
         super.paintComponent(aGraphics);
         treeImage=this.paintTree(aGraphics2D);
-        aGraphics.drawImage(treeImage , viewport.x , viewport.y ,this);
+        //aGraphics.drawImage(treeImage , offset.x , offset.y ,this);
+		aGraphics.drawImage(treeImage , viewport.x , viewport.y ,this);
     }
     
     /**
@@ -104,14 +107,14 @@ public class TreeView extends mvc.View
         aGraphics2D.setColor(Color.BLACK);
 		
 		//==============仮作成部=====================
-		for(TreeNode node : model.nodes)//オリジナル　//nodeを作画6/13虎谷 ※仮作成
+		for(TreeNode node : aModel.nodes)//オリジナル　//nodeを作画6/13虎谷 ※仮作成
 		{
 			int X = (int)node.getTarget().getX();
 			int Y = (int)node.getTarget().getY();
 			aGraphics2D.drawString(node.getDate(),X,Y);
 			aGraphics2D.drawRect(X,Y-12, (int)node.desideWidth().getX(), 14);
 		}
-		for(TreeBranch branch : model.branchs)
+		for(TreeBranch branch : aModel.branchs)
 		{
 			int X1 = (int)branch.getParentP().getX();
 			int Y1 = (int)branch.getParentP().getY();

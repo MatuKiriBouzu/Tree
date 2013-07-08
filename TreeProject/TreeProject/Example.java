@@ -15,27 +15,28 @@ public class Example {
 
 	public static void main(String[] args)
 	{
-		TreeModel a = new TreeModel();
+		TreeModel aModel = new TreeModel();
 		TreeBranch k = null;
+		aModel.inputTree("aaaa");//view展開前に先にデータの読み込み、体裁を整えておく
+
 		
 		//a.inputTree("aaaa");
 		//a.calculateTree();
 		//a.branchCalc();
 		//モデル処理からVIEWに取り入れ→viewに取り入れからモデル処理に変更
 		
-		TreeView aView= new TreeView(a);
+		TreeView aView= new TreeView(aModel);
 		
-		a.inputTree("aaaa");
+				
 		//a.calculateTree();//アニメーション用に切る
-		
 		Dimension aDimension = new Dimension(1250,700);
 		Example.open(aView,aDimension);
 		//↑追記部分 虎谷6/13
 	    
-		a.animationTree();
-		a.branchCalc();
+		aModel.animationTree();
+		aModel.branchCalc();
 		
-		k = (TreeBranch)a.branchs.get(1);
+		k = (TreeBranch)aModel.branchs.get(1);
 		System.out.println(k.parent);
 	}
 	

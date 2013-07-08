@@ -46,6 +46,13 @@ public class TreeModel extends mvc.Model
 	 **/
 	private int countUpY=20;
 	
+	/**
+	 * コンストラクタ、親から引き継ぎを明確化
+	 * 虎谷 6/20
+	 **/
+	public TreeModel(){
+		super();
+	}
 	
 	/**
 	 * getter
@@ -275,7 +282,7 @@ public class TreeModel extends mvc.Model
 		try{
 			branchCalc();
 			changed();
-			Thread.sleep(50);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -314,7 +321,7 @@ public class TreeModel extends mvc.Model
 			try{
 				branchCalc();
 				changed();
-				Thread.sleep(50);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
