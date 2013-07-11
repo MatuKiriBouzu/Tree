@@ -31,7 +31,7 @@ public class Example {
 		
 				
 		//a.calculateTree();//アニメーション用に切る
-		Dimension aDimension = new Dimension(1250,700);
+		Dimension aDimension = new Dimension(1250,700);//ウインドウサイズ
 		Example.open(aView,aDimension);
 		//↑追記部分 虎谷6/13
 	    
