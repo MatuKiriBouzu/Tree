@@ -16,7 +16,12 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Map;
+=======
+import java.awt.Font;
+
+>>>>>>> c842980d5937990779bfe8df3759db4b4dc775cb
 
 public class TreeView extends mvc.View
 {
@@ -30,8 +35,9 @@ public class TreeView extends mvc.View
      * マウスカーソルによるスクロール機能等を担当するコントローラー体を管理する変数。
      **/
 	//protected TreeController controller;//
+	
     
-    
+    Font aFont=new Font("TimesRoman",Font.ITALIC,10);//===============仮作成　虎谷　７/１１
     
     /*ここ三変数付け足しました。*/
     /**
@@ -113,8 +119,9 @@ public class TreeView extends mvc.View
 			TreeNode node = e.getValue();
 			int X = (int)node.getTarget().getX();
 			int Y = (int)node.getTarget().getY();
+			//aGraphics2D.setFont(aFont);
 			aGraphics2D.drawString(node.getDate(),X,Y);
-			aGraphics2D.drawRect(X,Y-12, (int)node.desideWidth().getX(), 14);
+			aGraphics2D.drawRect(X-1,Y-12, (int)node.desideWidth().getX()+2, 14);
 		}
 		for(TreeBranch branch : aModel.branchs)
 		{
@@ -122,7 +129,7 @@ public class TreeView extends mvc.View
 			int Y1 = (int)branch.getParentP().getY();
 			int X2 = (int)branch.getChildP().getX();
 			int Y2 = (int)branch.getChildP().getY();
-			aGraphics2D.drawLine(X1,Y1,X2,Y2);
+			aGraphics2D.drawLine(X1+1,Y1,X2-1,Y2);
 		}
 		//==========================================
 		

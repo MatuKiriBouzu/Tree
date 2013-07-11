@@ -1,9 +1,17 @@
 package TreeProject;
 
+import java.awt.Graphics2D;
+import java.awt.image.*;
+import java.io.File;
+import javax.imageio.*;
+
 import java.awt.Point;
 import java.awt.Font;
 import java.awt.FontMetrics;
+<<<<<<< HEAD
 import java.awt.Graphics;//文字列幅を取得するために必要
+=======
+>>>>>>> c842980d5937990779bfe8df3759db4b4dc775cb
 
 public class TreeNode{
 	
@@ -105,16 +113,15 @@ public class TreeNode{
     public Point desideWidth(){
 		//System.out.println("=確認=");
 		
-		//Graphics g = new Graphics();
-		//Font f=new Font("Monospaced",Font.PLAIN,12);
-		//System.out.println("=確認=");
-		//FontMetrics fm= g.getFontMetrics();
-		//System.out.println("=="+fm.stringWidth(date));
-		//Point point = new Point(fm.stringWidth(date),(int)target.getY()-5);//定数9
+		BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = BI.createGraphics();
+		Font aFont=new Font("TimesRoman",Font.ITALIC,10);//===============仮作成　虎谷　７/１１
+		FontMetrics fm = g2d.getFontMetrics();
 		
-		Point point = new Point((date.length())*8,0);//定数8
+		Point point = new Point(fm.stringWidth(date),0);//定数8
 		if(target!=null){
-			point = new Point((date.length())*8,(int)this.target.getY()-5);//定数8
+			//point = new Point((date.length())*8,(int)this.target.getY()-5);//定数8
+			point = new Point(fm.stringWidth(date),(int)this.target.getY()-5);//定数8
 		}
 		
         return point;
