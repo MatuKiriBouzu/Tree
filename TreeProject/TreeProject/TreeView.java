@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.util.ArrayList;
-
+import java.util.Map;
 
 public class TreeView extends mvc.View
 {
@@ -108,8 +108,9 @@ public class TreeView extends mvc.View
         aGraphics2D.setColor(Color.BLACK);
 		
 		//==============仮作成部=====================
-		for(TreeNode node : aModel.nodes)//オリジナル　//nodeを作画6/13虎谷 ※仮作成
+		for(Map.Entry<Integer,TreeNode> e : aModel.nodes.entrySet())//トップノード表示
 		{
+			TreeNode node = e.getValue();
 			int X = (int)node.getTarget().getX();
 			int Y = (int)node.getTarget().getY();
 			aGraphics2D.drawString(node.getDate(),X,Y);

@@ -1,10 +1,12 @@
 package TreeProject;
-
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.awt.Point;
+import java.util.Collections;
 
 public class TreeModel extends mvc.Model
 {
@@ -14,7 +16,7 @@ public class TreeModel extends mvc.Model
 	 * DeguchiShin 144849 6/10 記述
 	 * <TreeNode>とpublicを書き足し　虎谷　6/13
 	 **/
-	public ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
+	public HashMap<Integer,TreeNode> nodes = new HashMap<Integer,TreeNode>();
 	
 	/**
 	 * ブランチ群自体を保持するフィールド。
@@ -107,11 +109,6 @@ public class TreeModel extends mvc.Model
 	 *松きり坊主 144542 2013/6/11
 	 **/
 	
-	public void setNodes(int index,TreeNode node)
-	{
-		nodes.set(index,node);
-		
-	}
 	/**
 	 *getter
 	 *Branchsのindex番目のnodeを返す
@@ -139,29 +136,31 @@ public class TreeModel extends mvc.Model
 	 **/
 	public void calculateTree()
 	{
-		int distanceX = 20;//Node間隔を定義
-		int distanceY = 20;//Nodeの縦の並列間隔を定義
-		
-		
-		//====↓ここからトップノード探索
-		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
-		for(TreeBranch branch : branchs)//すべてのブランチから検索
+	//	int distanceX = 20;//Node間隔を定義
+//		int distanceY = 20;//Nodeの縦の並列間隔を定義
+//		
+//		
+//		//====↓ここからトップノード探索
+//		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+//		for(TreeBranch branch : branchs)//すべてのブランチから検索
+//		{
+//			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
+//			{
+//				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
+//				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+//				{
+//					topNode.remove(node);//トップリストから取り除く
+//					//System.out.println("=削除=");
+//					break;//削除が完了したら抜ける(でないとエラーが生じる)
+//				}
+//			}
+//		}
+		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
 		{
-			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
-			{
-				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
-				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
-				{
-					topNode.remove(node);//トップリストから取り除く
-					//System.out.println("=削除=");
-					break;//削除が完了したら抜ける(でないとエラーが生じる)
-				}
+			TreeNode buf = e.getValue();
+			if(buf.getLevel()==0){
+				calculateTree(buf,20);
 			}
-		}
-		for(TreeNode topnode : topNode)//トップノード表示
-		{
-			System.out.println("debugM TOP: "+topnode.getNumber());
-			calculateTree(topnode,20);
 		}
 		//====↑ここまで
 		
@@ -217,13 +216,14 @@ public class TreeModel extends mvc.Model
 	
 	
 	public void branchCalc(){
+		
 		for(TreeBranch branch : branchs)
-		{
-			int p1 = (int)(nodes.get(branch.getParent()-1).getTarget().getX());
-			int p2 = (int)(nodes.get(branch.getParent()-1).desideWidth().getX());
-			int p3 = (int)(nodes.get(branch.getParent()-1).desideWidth().getY());
-			int c1 = (int)(nodes.get(branch.getChild()-1).getTarget().getX());
-			int c2 = (int)(nodes.get(branch.getChild()-1).desideWidth().getY());
+		{			
+			int p1 = (int)(nodes.get(branch.getParent()).getTarget().getX());
+			int p2 = (int)(nodes.get(branch.getParent()).desideWidth().getX());
+			int p3 = (int)(nodes.get(branch.getParent()).desideWidth().getY());
+			int c1 = (int)(nodes.get(branch.getChild()).getTarget().getX());
+			int c2 = (int)(nodes.get(branch.getChild()).desideWidth().getY());
 			branch.decideParentP(new Point(p1 + p2 , p3));
 			branch.decideChildP(new Point(c1 , c2));
 		}
@@ -237,29 +237,32 @@ public class TreeModel extends mvc.Model
 	 **/
 	public void animationTree()
 	{
-		int distanceX = 20;//Node間隔を定義
-		int distanceY = 20;//Nodeの縦の並列間隔を定義
+	//	int distanceX = 20;//Node間隔を定義
+//		int distanceY = 20;//Nodeの縦の並列間隔を定義
+//		
+//		
+//		//====↓ここからトップノード探索
+//		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+//		for(TreeBranch branch : branchs)//すべてのブランチから検索
+//		{
+//			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
+//			{
+//				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
+//				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+//				{
+//					topNode.remove(node);//トップリストから取り除く
+//					//System.out.println("=削除=");
+//					break;//削除が完了したら抜ける(でないとエラーが生じる)
+//				}
+//			}
+//		}
 		
-		
-		//====↓ここからトップノード探索
-		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
-		for(TreeBranch branch : branchs)//すべてのブランチから検索
+		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
 		{
-			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
-			{
-				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
-				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
-				{
-					topNode.remove(node);//トップリストから取り除く
-					//System.out.println("=削除=");
-					break;//削除が完了したら抜ける(でないとエラーが生じる)
-				}
+			TreeNode buf = e.getValue();
+			if(buf.getLevel()==0){
+				animationTree(buf,20);
 			}
-		}
-		for(TreeNode topnode : topNode)//トップノード表示
-		{
-			System.out.println("debugM TOP: "+topnode.getNumber());
-			animationTree(topnode,20);
 		}
 		//====↑ここまで
 		
@@ -351,6 +354,7 @@ public class TreeModel extends mvc.Model
 	{
 		try
 		{
+			ArrayList<TreeNode> bufNodes = new ArrayList<TreeNode>();
 			
 			//FileReader fr = new FileReader("/Users/torataniakira/SE/treeRepository/Tree/TreeProject/TreeProject/tree.txt");
 			FileReader fr = new FileReader("./TreeProject/tree.txt");
@@ -358,45 +362,59 @@ public class TreeModel extends mvc.Model
 			
 			BufferedReader br = new BufferedReader(fr);
 			String aString = br.readLine();
-		
+			
 			TreeNode abuffer= null;
 			TreeBranch abuffer1 = null;
 			
 			while(aString != null) {
 				System.out.println(aString);
-		
-				if(aString.matches("[0-9]*, [a-zA-Z]*"))
+				
+				if(aString.matches("[a-zA-Z]*") || aString.matches(".*--.*"))
 				{
-				//	System.out.println("[1-9]*,[a-zA-Z]*"+aString);
-					abuffer = this.inputNode(aString);
-					this.nodes.add(abuffer);					
+					int levelCount;
+					String bufString = null;
+					levelCount = inputNodeLevel(aString);
+					bufString = inputNodeString(aString);
+					abuffer = new TreeNode(bufString,levelCount);
+					bufNodes.add(abuffer);					
+					//System.out.println("おっぱい"+ans+"おっぱい"+bufString);
 				}
-				else if(aString.matches("[a-zA-Z]*") || aString.matches(".*--.*"))
+				else if(aString.matches("[0-9]*, [a-zA-Z]*"))
 				{
-					//inputNodeLevel();
+					//	System.out.println("[1-9]*,[a-zA-Z]*"+aString);
+					//	abuffer = this.inputNode(aString);
+					//	this.nodes.add(abuffer);
+					inputNodeNumber(aString,bufNodes);
+					
 				}
 				else if(aString.matches("[0-9]*, [0-9]*"))
 				{
-				//	System.out.println("[1-9]*, [1-9]*"+aString);
+					//	System.out.println("[1-9]*, [1-9]*"+aString);
 					abuffer1 = this.inputBranch(aString);
 					this.branchs.add(abuffer1);
 				}
 				aString = br.readLine();
 				
-									
+				
 			}		
 		} catch (IOException e)
 		{
 			System.out.println(e);
 		}
-		
-	
+		//Collections.sort(nodes,new TreeNodeComparator());
 	}
 	
-		public int inputTreeLevel(String aString){
-			
-			
-			return 0;
+	public int inputNodeLevel(String aString){
+		int LevelCount = 0;
+		int index = 4;
+		while(aString.startsWith("|-- ",index*LevelCount))LevelCount++;
+		return LevelCount;
+	}
+	public String inputNodeString(String aString){
+		String[] aStrings = null;
+		aStrings = aString.split(" ");
+		System.out.println(aStrings[aStrings.length-1]);
+		return  aStrings[aStrings.length-1];
 	}
 	public TreeBranch inputBranch(String aString){
 		int parentNum,childNum;
@@ -409,8 +427,8 @@ public class TreeModel extends mvc.Model
 		return branch;
 		
 	}
-	public TreeNode inputNode(String aString){
-
+	public void inputNodeNumber(String aString,ArrayList<TreeNode> bufNodes){
+		
 		int number;
 		String word;
 		TreeNode node = null;
@@ -418,11 +436,13 @@ public class TreeModel extends mvc.Model
 		aStrings = aString.split(", ");
 		number = Integer.parseInt(aStrings[0]);
 		word = (aStrings[1]);
-		node = new TreeNode(number,word);
-		node.setTarget(new Point(20,nodesMax*20+10));//初期位置の決定
-		nodesMax++;
-		return  node;
-		
+		for(TreeNode i:bufNodes){
+			if(i.getDate().equals(word)){
+				this.nodes.put(number,i);
+				i.setTarget(new Point(20,(i.getNumber()-1)*20+10));//初期位置の決定
+				i.setNumber(number);
+			}
+		}		
 	}
 	/**
 	 * View,Controllerに報告する.
@@ -430,17 +450,17 @@ public class TreeModel extends mvc.Model
 	 * オーバーライドを取り消し　6/20 虎谷
 	 **/
 	//public void changed()
-//	 {
-//	 Iterator anIterator = dependents.iterator();
-//	 while (anIterator.hasNext())
-//	 {
-//	 TreeView aView = (TreeView)anIterator.next();
-//	 aView.update();
-//	 }
-//	 return;
-//	 }
-//	 
-	 /**
+	//	 {
+	//	 Iterator anIterator = dependents.iterator();
+	//	 while (anIterator.hasNext())
+	//	 {
+	//	 TreeView aView = (TreeView)anIterator.next();
+	//	 aView.update();
+	//	 }
+	//	 return;
+	//	 }
+	//	 
+	/**
 	 * 描画する。
 	 * 松きり坊主 144542 2013/6/3
 	 * 虎谷 6/13 暫定削除

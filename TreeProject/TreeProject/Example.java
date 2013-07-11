@@ -1,5 +1,5 @@
 package TreeProject;
-
+import java.util.Map;
 import java.awt.Point;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -21,11 +21,11 @@ public class Example {
 		TreeBranch aBranch = null;
 		aModel.inputTree("aaaa");//view展開前に先にデータの読み込み、体裁を整えておく
 		
-		for(TreeNode i: aModel.nodes){
-			System.out.println(i.date+"中身:番号"+i.number);
-		}
-		for(TreeBranch i: aModel.branchs){
-			System.out.println(i.parent+"親子"+i.child);
+		for(Map.Entry<Integer,TreeNode> e : aModel.nodes.entrySet())//トップノード表示
+		{
+			TreeNode buf = e.getValue();
+			int i  =e.getKey();
+			System.out.println("key:getValue"+i+buf.date);
 		}
 		
 		

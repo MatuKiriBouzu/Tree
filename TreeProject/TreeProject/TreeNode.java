@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;//文字列幅を取得するために必要
+
 public class TreeNode{
 	
 	/**
@@ -44,6 +45,10 @@ public class TreeNode{
 		this.number = number;
 		this.date = word;
     }
+	TreeNode(String aString,int level){
+		this.level = level;
+		this.date = aString;
+	}
 	
     /**
      * getter 虎谷　6/13
@@ -52,7 +57,10 @@ public class TreeNode{
     {
 		return number;   
     }
-	
+	public void setNumber(int num)
+	{
+		this.number=num;
+	}
     /**
      * getter 虎谷　6/13
      **/
