@@ -1,5 +1,6 @@
 package TreeProject;
 
+import java.awt.Point;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,9 +17,17 @@ public class Example {
 	public static void main(String[] args)
 	{
 		TreeModel aModel = new TreeModel();
+		TreeNode aNode = null;
 		TreeBranch aBranch = null;
 		aModel.inputTree("aaaa");//view展開前に先にデータの読み込み、体裁を整えておく
-
+		
+		for(TreeNode i: aModel.nodes){
+			System.out.println(i.date+"中身:番号"+i.number);
+		}
+		for(TreeBranch i: aModel.branchs){
+			System.out.println(i.parent+"親子"+i.child);
+		}
+		
 		
 		//a.inputTree("aaaa");
 		//a.calculateTree();
@@ -28,11 +37,10 @@ public class Example {
 		TreeView aView= new TreeView(aModel);
 		
 				
-		//a.calculateTree();//アニメーション用に切る
+//		aModel.calculateTree();//アニメーション用に切る
 		Dimension aDimension = new Dimension(1250,700);
 		Example.open(aView,aDimension);
 		//↑追記部分 虎谷6/13
-	    
 		aModel.animationTree();
 		aModel.branchCalc();
 		

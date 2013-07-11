@@ -15,7 +15,7 @@ public class TreeBranch{
     /**
 	 * 子ノードの情報
      **/
-    private int child;
+    public int child;
     
     /**
 	 * 親ノードの接続位置情報
