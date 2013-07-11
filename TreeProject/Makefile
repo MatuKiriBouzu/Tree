@@ -17,3 +17,6 @@ doc:
 
 zip:
 	$(ANT) zip
+
+profile:
+	$(ANT) profile

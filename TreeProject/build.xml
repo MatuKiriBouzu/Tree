@@ -10,6 +10,7 @@
   <property name="instdir" value="./${ant.project.name}.app/Contents/Resources/Java" />
   <property name="copyright" value="Copyright 2013 _G_Name_ All Right Reserved." />
   <property name="zipname" value="${ant.project.name}" />
+  <property name="profile" value="java.hprof" />
 
   <tstamp>
     <format property="date" pattern="yyyy/MM/dd" />
@@ -63,6 +64,7 @@
     <delete>
       <fileset dir="${package}" includes="*.class" />
     </delete>
+    <delete file="${profile}" />
     <echo>on ${date} at ${time}</echo>
   </target>
 
@@ -109,6 +111,16 @@
     <zip destfile="../${zipname}.zip">
       <zipfileset dir="." prefix="${zipname}" />
     </zip>
+    <echo>on ${date} at ${time}</echo>
+  </target>
+
+  <target name="profile" depends="all" description="make profile">
+    <exec executable="java" spawn="false">
+      <arg line="-Dfile.encoding=UTF-8 -Xmx512m -Xss1024k -agentlib:hprof=depth=10,file=${profile},format=b -jar ${package}.jar" />
+    </exec>
+    <exec executable="jhat" spawn="false">
+      <arg line="-J-Xmx768m -port 7000 ${profile}" />
+    </exec>
     <echo>on ${date} at ${time}</echo>
   </target>
 
