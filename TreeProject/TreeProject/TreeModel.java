@@ -14,26 +14,26 @@ public class TreeModel extends mvc.Model
 	 * DeguchiShin 144849 6/10 記述
 	 * <TreeNode>とpublicを書き足し　虎谷　6/13
 	 **/
-	public ArrayList<TreeNode> nodes;
+	public ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
 	
 	/**
 	 * ブランチ群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 * <TreeBranch>を書き足し　虎谷　6/13
 	 **/
-	public ArrayList<TreeBranch> branchs;
+	public ArrayList<TreeBranch> branchs = new ArrayList<TreeBranch>();
 	
 	/**
 	 * ノード群の最大数を保持するフィールド。
 	 * DeuchiShin 144849 6/10 記述
 	 **/
-	private int nodesMax=0;
+	private int nodesMax = 0;
 	
 	/**
 	 * ブランチ群の最大数を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 **/
-	private int branchsMax=10;
+	private int branchsMax = 10;
 	
 	/**
 	 * BufferedReader自体を保持するフィールド？(誰か分かる人修正たのみます)
@@ -44,7 +44,7 @@ public class TreeModel extends mvc.Model
 	 * Yの作画位置を次々下げてゆくために使用
 	 * 虎谷 6/13
 	 **/
-	private int countUpY=20;
+	private int countUpY = 20;
 	
 	/**
 	 * コンストラクタ、親から引き継ぎを明確化
@@ -71,6 +71,7 @@ public class TreeModel extends mvc.Model
 	public void setNodesMax(int num)
 	{
 		this.nodesMax = num;
+		return;
 	}
 	/**
  	 * getter
@@ -89,6 +90,7 @@ public class TreeModel extends mvc.Model
 	public void setBranchsMax(int num)
 	{
 		this.branchsMax = num;
+		return;
 	}
 	/**
 	 * getter
@@ -142,19 +144,19 @@ public class TreeModel extends mvc.Model
 		
 		
 		//====↓ここからトップノード探索
-		ArrayList<TreeNode> topNode = new ArrayList(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
 		for(TreeBranch branch : branchs)//すべてのブランチから検索
 		{
-			 for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
-			 {
-				 //System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
-				 if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
+			{
+				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
+				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
 				{
 					topNode.remove(node);//トップリストから取り除く
 					//System.out.println("=削除=");
 					break;//削除が完了したら抜ける(でないとエラーが生じる)
 				}
-			 }
+			}
 		}
 		for(TreeNode topnode : topNode)//トップノード表示
 		{
@@ -162,7 +164,7 @@ public class TreeModel extends mvc.Model
 			calculateTree(topnode,20);
 		}
 		//====↑ここまで
-	
+		
 		return;
 	}
 	int count=0;
@@ -193,7 +195,7 @@ public class TreeModel extends mvc.Model
 				
 				afterBranchs.add(branch);
 				
-
+				
 			}
 		}
 		//========↓Y座標決定処理↓=========
@@ -207,7 +209,7 @@ public class TreeModel extends mvc.Model
 			//paint(pointX,pointY)
 		}
 		//========↑===========↑========
-			
+		
 		node.setTarget(new Point(pointX,pointY));
 		
 		return;
@@ -240,7 +242,7 @@ public class TreeModel extends mvc.Model
 		
 		
 		//====↓ここからトップノード探索
-		ArrayList<TreeNode> topNode = new ArrayList(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
 		for(TreeBranch branch : branchs)//すべてのブランチから検索
 		{
 			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
@@ -281,7 +283,7 @@ public class TreeModel extends mvc.Model
 		//==========↓作画処理一度目↓===========
 		try{
 			branchCalc();
-			changed();
+			super.changed();
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -320,7 +322,7 @@ public class TreeModel extends mvc.Model
 			
 			try{
 				branchCalc();
-				changed();
+				super.changed();
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -333,17 +335,20 @@ public class TreeModel extends mvc.Model
 		
 		return;
 	}
-
+	
 	
 	/**
 	 * ファイルからそれぞれの情報を読み取る
 	 * 松きり坊主 144542 2013/6/3
 	 * 虎谷 144858 2013/6/13node部　動作確認まで
+	 *松きり坊主 144542 2013/7/9
 	 * 追記　虎谷 6/20 ノード初期位置を定義（左に立て一列に配置）
 	 **/
-	public void inputTree(String fileName)
+	/*
+	 inputTree作り直し
+	 */
+	public void inputTree(String fileName)	
 	{
-		
 		try
 		{
 			
@@ -352,117 +357,90 @@ public class TreeModel extends mvc.Model
 			//相対パスに設定
 			
 			BufferedReader br = new BufferedReader(fr);
-			String aString = new String();
-	
-			while(br.ready()) {
-				aString = br.readLine();				
-				System.out.println(" aString: " + aString);
-				
-				if(aString.equals("nodes:"))
+			String aString = br.readLine();
+		
+			TreeNode abuffer= null;
+			TreeBranch abuffer1 = null;
+			
+			while(aString != null) {
+				System.out.println(aString);
+		
+				if(aString.matches("[0-9]*, [a-zA-Z]*"))
 				{
-					this.inputNode(br);
-					this.inputBranch(br);
-					//↑おかしいのはわかってるけど、Nodeでbranches:を読み取ったから↓の条件に引っかからないため
-					//暫定的にこのように記述
+				//	System.out.println("[1-9]*,[a-zA-Z]*"+aString);
+					abuffer = this.inputNode(aString);
+					this.nodes.add(abuffer);					
 				}
+				else if(aString.matches("[a-zA-Z]*") || aString.matches(".*--.*"))
+				{
+					//inputNodeLevel();
+				}
+				else if(aString.matches("[0-9]*, [0-9]*"))
+				{
+				//	System.out.println("[1-9]*, [1-9]*"+aString);
+					abuffer1 = this.inputBranch(aString);
+					this.branchs.add(abuffer1);
+				}
+				aString = br.readLine();
 				
-				//if(aString.equals("branches:"))
-				//{
-				//	this.inputBranch(br);
-				//}				
-				
+									
 			}		
 		} catch (IOException e)
 		{
 			System.out.println(e);
-		}	
+		}
+		
+	
+	}
+	
+		public int inputTreeLevel(String aString){
+			
+			
+			return 0;
+	}
+	public TreeBranch inputBranch(String aString){
+		int parentNum,childNum;
+		TreeBranch branch = null;
+		String[] aStrings = null;
+		aStrings = aString.split(", ");
+		parentNum = Integer.parseInt(aStrings[0]);
+		childNum = Integer.parseInt(aStrings[1]);
+		branch = new TreeBranch(parentNum,childNum);
+		return branch;
 		
 	}
-	/**
-	 * Nodeの情報をファイルから読む
-	 * 松きり坊主 144542 2013/6/3
-	 * 虎谷 144858 2013/6/13動作確認まで
-	 **/
-	public void inputNode(BufferedReader br)
-	//返り値をTreeNodeからvoidに変更6/13
-	{
+	public TreeNode inputNode(String aString){
+
 		int number;
 		String word;
 		TreeNode node = null;
-		String aString = null;
 		String[] aStrings = null;
-		ArrayList<TreeNode> nodedate = new ArrayList<TreeNode>();
-		try
-		{
-			while(br.ready())
-			{
-				aString = br.readLine(); 
-				
-				if(aString.equals("branches:"))break;
-				
-				aStrings = aString.split(", ");
-				number = Integer.parseInt(aStrings[0]);
-				word = (aStrings[1]);
-				//	debugMessage			System.out.println("debug message String value number: "+number);
-				//	debugMessage			System.out.println("debug message Integer value word: "+word);
-				nodedate.add(new TreeNode(number,word));
-				nodedate.get(nodesMax).setTarget(new Point(20,nodesMax*20+10));
-				nodesMax++;
-			}
-		}catch(IOException e)
-		{
-			e.printStackTrace();
-		}	
-		this.nodes = nodedate;
-		//nodesMax = nodes.size();
-	}
-	
-	/**
-	 * Branchの情報をファイルから読む
-	 * 松きり坊主 144542 2013/6/3
-	 **/
-	private void inputBranch(BufferedReader br)
-	{
-		int parentNum,childNum;
-		TreeBranch branch = null;
-		String aString = null;
-		String[] aStrings = null;
-		ArrayList<TreeBranch> branchdate = new ArrayList<TreeBranch>();
-		try
-		{
-
-			while(br.ready())
-			{
-				aString = br.readLine(); 
-				aStrings = aString.split(", ");
-				parentNum = Integer.parseInt(aStrings[0]);
-				childNum = Integer.parseInt(aStrings[1]);
-				//	debugMessage			System.out.println("debug message Integer value a:"+parentNum+" b:"+childNum);
-				branchdate.add(new TreeBranch(parentNum,childNum));
-			}
-		}catch(IOException e)
-		{
-			e.printStackTrace();
-		}	
-		this.branchs = branchdate;
+		aStrings = aString.split(", ");
+		number = Integer.parseInt(aStrings[0]);
+		word = (aStrings[1]);
+		node = new TreeNode(number,word);
+		node.setTarget(new Point(20,nodesMax*20+10));//初期位置の決定
+		nodesMax++;
+		return  node;
+		
 	}
 	/**
 	 * View,Controllerに報告する.
 	 * 松きり坊主 144542 2013/6/3
 	 * オーバーライドを取り消し　6/20 虎谷
 	 **/
-	/*public void changed()
-	{
-		Iterator anIterator = dependents.iterator();
-		while (anIterator.hasNext())
-		{
-			TreeView aView = (TreeView)anIterator.next();
-			aView.update();
-		}
-		return;
-	}
-	
-	/**
+	//public void changed()
+//	 {
+//	 Iterator anIterator = dependents.iterator();
+//	 while (anIterator.hasNext())
+//	 {
+//	 TreeView aView = (TreeView)anIterator.next();
+//	 aView.update();
+//	 }
+//	 return;
+//	 }
+//	 
+	 /**
 	 * 描画する。
 	 * 松きり坊主 144542 2013/6/3
 	 * 虎谷 6/13 暫定削除
