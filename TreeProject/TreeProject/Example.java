@@ -25,6 +25,8 @@ public class Example {
 		//a.branchCalc();
 		//モデル処理からVIEWに取り入れ→viewに取り入れからモデル処理に変更
 		
+
+		
 		TreeView aView= new TreeView(aModel);
 		
 				
