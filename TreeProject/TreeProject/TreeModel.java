@@ -373,7 +373,7 @@ public class TreeModel extends mvc.Model
 				}
 				else if(aString.matches("[a-zA-Z]*") || aString.matches(".*--.*"))
 				{
-					inputNodeLevel();
+					//inputNodeLevel();
 				}
 				else if(aString.matches("[0-9]*, [0-9]*"))
 				{
