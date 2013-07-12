@@ -25,7 +25,7 @@ public class Example {
 		{
 			TreeNode buf = e.getValue();
 			int i  =e.getKey();
-			System.out.println("key:getValue"+i+buf.date);
+			System.out.println("key:"+i+" Value:"+buf.date+" Level:"+buf.level);
 		}
 		
 		

@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.awt.Point;
 import java.util.Collections;
-
+//ID抜け問題に対策してプログラム大幅変更
 public class TreeModel extends mvc.Model
 {
 	
@@ -15,6 +15,7 @@ public class TreeModel extends mvc.Model
 	 * ノード群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 * <TreeNode>とpublicを書き足し　虎谷　6/13
+	 * ハッシュマップに切り替え 松きり坊主 144542 2013/7/12 
 	 **/
 	public HashMap<Integer,TreeNode> nodes = new HashMap<Integer,TreeNode>();
 	
@@ -234,37 +235,20 @@ public class TreeModel extends mvc.Model
 	 * アニメーションにする
 	 * 松きり坊主 144542 2013/6/3
 	 * 削除予定。トップノード探索の後、アニメーションツリーに引き継ぎ 6/20　虎谷
+	 * 松きり坊主 144542 2013/7/11　移行準備完了、レベルによる親探索に変更済み
 	 **/
 	public void animationTree()
 	{
-	//	int distanceX = 20;//Node間隔を定義
-//		int distanceY = 20;//Nodeの縦の並列間隔を定義
-//		
-//		
-//		//====↓ここからトップノード探索
-//		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
-//		for(TreeBranch branch : branchs)//すべてのブランチから検索
-//		{
-//			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
-//			{
-//				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
-//				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
-//				{
-//					topNode.remove(node);//トップリストから取り除く
-//					//System.out.println("=削除=");
-//					break;//削除が完了したら抜ける(でないとエラーが生じる)
-//				}
-//			}
-//		}
-		
 		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
 		{
-			TreeNode buf = e.getValue();
-			if(buf.getLevel()==0){
-				animationTree(buf,20);
+			TreeNode topNode = e.getValue();
+			//System.out.println("=確認="+topNode.getDate()+" =階層="+topNode.getLevel());
+			if(topNode.getLevel()==0){
+				int number = e.getKey();
+				System.out.println("=確認="+topNode.getDate());
+				animationTree(topNode,number,20);//20はx座標の初期位置、個々から子ノードまで足しあわせ
 			}
 		}
-		//====↑ここまで
 		
 		return;
 	}	
@@ -274,15 +258,13 @@ public class TreeModel extends mvc.Model
 	 * 松きり坊主 144542 2013/6/3
 	 * 定義する。間々に内部変更通知を出すようにして、viewに伝え、0.5秒待つ処理を組み込み済み 6/20 虎谷
 	 **/
-	public void animationTree(TreeNode node,int pointX)//(自ノードの)最終X座標
+	public void animationTree(TreeNode node,int number,int pointX)//(自ノードの)最終X座標
 	{
 		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
 		int childCount = 0;
 		int sumY=0;//子ノードのY座標を貯める
 		int pointY = countUpY;//最終Y座標 (初期値カウントアップYの数値)
-		
 		node.setTarget(new Point(pointX,pointY));//暫定配置、子ノードがあれば後に再配置する
-		//paint(pointX,pointY)
 		//==========↓作画処理一度目↓===========
 		try{
 			branchCalc();
@@ -291,7 +273,7 @@ public class TreeModel extends mvc.Model
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("=確認1S=");
+		//System.out.println("=確認1S="+node.getDate());
 		//==========↑作画処理一度目↑===========
 		
 		
@@ -299,14 +281,14 @@ public class TreeModel extends mvc.Model
 		for(TreeBranch branch : branchs)
 		{
 			
-			if(branch.getParent()==node.getNumber())
+			if(branch.getParent()==number)
 			{
 				childCount++;
-				TreeNode childNode = nodes.get(branch.getChild()-1);//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
+				TreeNode childNode = nodes.get(branch.getChild());//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
 				
-				animationTree(childNode,nextPointX);
+				animationTree(childNode,branch.getChild(),nextPointX);
 				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
-				
+				System.out.println("=確認2S="+childNode.getDate());
 				afterBranchs.add(branch);
 				
 				
@@ -330,7 +312,7 @@ public class TreeModel extends mvc.Model
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("=確認2S="+node.getDate());
+			//System.out.println("=確認2S="+node.getDate());
 		}
 		//========↑===========↑========
 		
@@ -356,9 +338,10 @@ public class TreeModel extends mvc.Model
 		{
 			ArrayList<TreeNode> bufNodes = new ArrayList<TreeNode>();
 			
-			//FileReader fr = new FileReader("/Users/torataniakira/SE/treeRepository/Tree/TreeProject/TreeProject/tree.txt");
-			FileReader fr = new FileReader("./TreeProject/tree.txt");
-			//相対パスに設定
+			//FileReader fr = new FileReader("./TreeProject/tree.txt");
+			FileReader fr = new FileReader("./TreeProject/forest.txt");
+			//FileReader fr = new FileReader("./TreeProject/semilattice.txt");
+			
 			
 			BufferedReader br = new BufferedReader(fr);
 			String aString = br.readLine();
@@ -428,7 +411,6 @@ public class TreeModel extends mvc.Model
 		
 	}
 	public void inputNodeNumber(String aString,ArrayList<TreeNode> bufNodes){
-		
 		int number;
 		String word;
 		TreeNode node = null;
@@ -437,10 +419,11 @@ public class TreeModel extends mvc.Model
 		number = Integer.parseInt(aStrings[0]);
 		word = (aStrings[1]);
 		for(TreeNode i:bufNodes){
-			if(i.getDate().equals(word)){
+			if(i.getDate().equals(word)){//レベル探索で用いたbufNodesのリストより、wordが同じ物にレベルを入れる
 				this.nodes.put(number,i);
-				i.setTarget(new Point(20,(i.getNumber()-1)*20+10));//初期位置の決定
+				i.setTarget(new Point(20,(nodesMax*20+10)));//初期位置の決定
 				i.setNumber(number);
+				nodesMax++;//ハッシュマップ用ではなく、初期位置決定用、IDから位置を求める場合ID歯抜けがある場合初期位置も歯抜けになるため
 			}
 		}		
 	}
@@ -469,5 +452,42 @@ public class TreeModel extends mvc.Model
 	//{
 	//	return;
 	//}
+	
+	
+	/*======元トップノード探索=========*
+	public void animationTree()
+	{
+		//	int distanceX = 20;//Node間隔を定義
+		//		int distanceY = 20;//Nodeの縦の並列間隔を定義
+		//		
+		//		
+		//		//====↓ここからトップノード探索
+		//		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+		//		for(TreeBranch branch : branchs)//すべてのブランチから検索
+		//		{
+		//			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
+		//			{
+		//				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
+		//				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+		//				{
+		//					topNode.remove(node);//トップリストから取り除く
+		//					//System.out.println("=削除=");
+		//					break;//削除が完了したら抜ける(でないとエラーが生じる)
+		//				}
+		//			}
+		//		}
+		
+		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
+		{
+			TreeNode buf = e.getValue();
+			if(buf.getLevel()==0){
+				animationTree(buf,20);
+			}
+		}
+		//====↑ここまで
+		
+		return;
+	}	
+	 */
 	
 }
