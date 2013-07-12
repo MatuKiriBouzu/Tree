@@ -137,83 +137,69 @@ public class TreeModel extends mvc.Model
 	 **/
 	public void calculateTree()
 	{
-	//	int distanceX = 20;//Node間隔を定義
-//		int distanceY = 20;//Nodeの縦の並列間隔を定義
-//		
-//		
-//		//====↓ここからトップノード探索
-//		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
-//		for(TreeBranch branch : branchs)//すべてのブランチから検索
-//		{
-//			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
-//			{
-//				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
-//				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
-//				{
-//					topNode.remove(node);//トップリストから取り除く
-//					//System.out.println("=削除=");
-//					break;//削除が完了したら抜ける(でないとエラーが生じる)
-//				}
-//			}
-//		}
-		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
 		{
-			TreeNode buf = e.getValue();
-			if(buf.getLevel()==0){
-				calculateTree(buf,20);
+			for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
+			{
+				TreeNode topNode = e.getValue();
+				//System.out.println("=確認="+topNode.getDate()+" =階層="+topNode.getLevel());
+				if(topNode.getLevel()==0){
+					int number = e.getKey();
+					System.out.println("=確認="+topNode.getDate());
+					calculateTree(number,20);//20はx座標の初期位置、個々から子ノードまで足しあわせ
+				}
 			}
-		}
-		//====↑ここまで
-		
-		return;
+			//==========↓作画処理↓===========
+			branchCalc();
+			super.changed();
+			//==========↑作画処理↑===========
+			
+			return;
+		}	
 	}
-	int count=0;
+	
+	int distanceX = 25;//Node間隔を定義//階層間距離←→
+	int distanceY = 16;//Node間隔を定義//階層間距離↑↓
+	
 	/**
 	 ***************虎谷　2回め以降用
 	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
 	 *松きり坊主 144542 2013/6/3
 	 **/
-	int distanceX = 25;//Node間隔を定義//階層間距離←→
-	public void calculateTree(TreeNode node,int pointX)//(自ノードの)最終X座標
+	
+	public void calculateTree(int number,int pointX)//(自ノードの)最終X座標
 	{
+		TreeNode node = nodes.get(number);
 		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
 		int childCount = 0;
 		int sumY=0;//子ノードのY座標を貯める
 		int pointY = countUpY;//最終Y座標 (初期値カウントアップYの数値)
-		//paint(pointX,pointY)
-		ArrayList<TreeBranch> afterBranchs = new ArrayList<TreeBranch>();//自ノードのY座標が後で求まるので、一旦格納する
+		node.setTarget(new Point(pointX,pointY));//暫定配置、子ノードがあれば後に再配置する
+		
 		for(TreeBranch branch : branchs)
 		{
-			
-			if(branch.getParent()==node.getNumber())
+			if(branch.getParent()==number)
 			{
 				childCount++;
-				TreeNode childNode = nodes.get(branch.getChild()-1);//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
-				
-				calculateTree(childNode,nextPointX);
+				TreeNode childNode = nodes.get(branch.getChild());//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
+				calculateTree(branch.getChild(),nextPointX);
 				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
-				
-				afterBranchs.add(branch);
-				
-				
+				//System.out.println("=確認2S="+childNode.getDate());
 			}
 		}
 		//========↓Y座標決定処理↓=========
 		if(childCount==0)//子ノードがなければ
 		{
-			countUpY += 16;//Nodeの縦の並列間隔を定義,定数化するべき
+			countUpY += 16;//Nodeの縦の並列間隔
 		}
 		else//子ノードがあればそれらの座標から自ノードの座標を決定する
 		{
-			pointY =(int)sumY/childCount;
-			//paint(pointX,pointY)
+			pointY =(int)(sumY/childCount);
 		}
-		//========↑===========↑========
-		
 		node.setTarget(new Point(pointX,pointY));
-		
+		//========↑===========↑========
 		return;
 	}
+	
 	
 	
 	public void branchCalc(){
@@ -232,7 +218,7 @@ public class TreeModel extends mvc.Model
 	
 	/**
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
-	 * アニメーションにする
+	 * アニメーションにする. トップノードをはじめに処理に放り込むメソッド
 	 * 松きり坊主 144542 2013/6/3
 	 * 削除予定。トップノード探索の後、アニメーションツリーに引き継ぎ 6/20　虎谷
 	 * 松きり坊主 144542 2013/7/11　移行準備完了、レベルによる親探索に変更済み
@@ -246,7 +232,7 @@ public class TreeModel extends mvc.Model
 			if(topNode.getLevel()==0){
 				int number = e.getKey();
 				System.out.println("=確認="+topNode.getDate());
-				animationTree(topNode,number,20);//20はx座標の初期位置、個々から子ノードまで足しあわせ
+				animationTree(number,20);//20はx座標の初期位置、個々から子ノードまで足しあわせ
 			}
 		}
 		
@@ -257,9 +243,11 @@ public class TreeModel extends mvc.Model
 	 * アニメーションにする
 	 * 松きり坊主 144542 2013/6/3
 	 * 定義する。間々に内部変更通知を出すようにして、viewに伝え、0.5秒待つ処理を組み込み済み 6/20 虎谷
+	 * ハッシュマップ対応可 7/12 虎谷
 	 **/
-	public void animationTree(TreeNode node,int number,int pointX)//(自ノードの)最終X座標
+	public void animationTree(int number,int pointX)//(自ノードの)最終X座標
 	{
+		TreeNode node = nodes.get(number);
 		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
 		int childCount = 0;
 		int sumY=0;//子ノードのY座標を貯める
@@ -270,54 +258,39 @@ public class TreeModel extends mvc.Model
 			branchCalc();
 			super.changed();
 			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {e.printStackTrace();}
 		//System.out.println("=確認1S="+node.getDate());
 		//==========↑作画処理一度目↑===========
 		
-		
-		ArrayList<TreeBranch> afterBranchs = new ArrayList<TreeBranch>();//自ノードのY座標が後で求まるので、一旦格納する
 		for(TreeBranch branch : branchs)
 		{
-			
 			if(branch.getParent()==number)
 			{
 				childCount++;
 				TreeNode childNode = nodes.get(branch.getChild());//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
-				
-				animationTree(childNode,branch.getChild(),nextPointX);
+				animationTree(branch.getChild(),nextPointX);
 				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
-				System.out.println("=確認2S="+childNode.getDate());
-				afterBranchs.add(branch);
-				
-				
+				//System.out.println("=確認2S="+childNode.getDate());
 			}
 		}
-		//========↓Y座標決定処理↓=========
+		//========↓Y座標決定処理(必要があれば作画処理２度目)↓=========
 		if(childCount==0)//子ノードがなければ
 		{
-			countUpY += 16;//Nodeの縦の並列間隔を定義,定数化するべき
+			countUpY += 16;//Nodeの縦の並列間隔
 			node.setTarget(new Point(pointX,pointY));
 		}
 		else//子ノードがあればそれらの座標から自ノードの座標を決定する
 		{
-			pointY =(int)sumY/childCount;
+			pointY =(int)(sumY/childCount);
 			node.setTarget(new Point(pointX,pointY));
-			
 			try{
 				branchCalc();
 				super.changed();
 				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			} catch (InterruptedException e) {e.printStackTrace();}
 			//System.out.println("=確認2S="+node.getDate());
 		}
 		//========↑===========↑========
-		
-		
-		
 		return;
 	}
 	
@@ -338,8 +311,8 @@ public class TreeModel extends mvc.Model
 		{
 			ArrayList<TreeNode> bufNodes = new ArrayList<TreeNode>();
 			
-			//FileReader fr = new FileReader("./TreeProject/tree.txt");
-			FileReader fr = new FileReader("./TreeProject/forest.txt");
+			FileReader fr = new FileReader("./TreeProject/tree.txt");
+			//FileReader fr = new FileReader("./TreeProject/forest.txt");
 			//FileReader fr = new FileReader("./TreeProject/semilattice.txt");
 			
 			
@@ -384,7 +357,6 @@ public class TreeModel extends mvc.Model
 		{
 			System.out.println(e);
 		}
-		//Collections.sort(nodes,new TreeNodeComparator());
 	}
 	
 	public int inputNodeLevel(String aString){
