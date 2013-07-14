@@ -16,28 +16,24 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.Map;
-=======
 import java.awt.Font;
-
->>>>>>> c842980d5937990779bfe8df3759db4b4dc775cb
+import java.awt.Dimension;
 
 public class TreeView extends mvc.View
 {
     /**
      * 情報(Node,Blanch等)を格納するモデル体を管理する変数。
      * modelからTreeModelに変更、間違っているかも6/13虎谷
+	 * getModel()に役割移転  7/14 虎谷
      **/
-	protected TreeModel aModel;
+	//protected TreeModel aModel;
     
     /**
      * マウスカーソルによるスクロール機能等を担当するコントローラー体を管理する変数。
      **/
 	//protected TreeController controller;//
 	
-    
-    Font aFont=new Font("TimesRoman",Font.ITALIC,10);//===============仮作成　虎谷　７/１１
     
     /*ここ三変数付け足しました。*/
     /**
@@ -58,6 +54,12 @@ public class TreeView extends mvc.View
      **/
     private Graphics2D aGraphics2D;
 	
+	/**
+     * 課題のフォント指定事項
+     * 虎谷　7/14
+     **/
+	private Font aFont;
+	
     
     
     /**
@@ -66,62 +68,71 @@ public class TreeView extends mvc.View
      * コンス"トラ"クタ……"虎"谷……深夜テンション小林
 	 * 修正完了。親から帰ってきたものを型変換の上格納　7/5　虎谷
      **/
-	public TreeView(TreeModel aModel)//
+	public TreeView(TreeModel aModel,TreeController aController)//
 	{
-		super(aModel);
-		this.aModel=(TreeModel)(model);
+		super(aModel,aController);
+		aFont = getModel().getFont();
+	}
+	
+	/**
+	 * 自分のモデルを応答する。
+	 */
+	public TreeModel getModel()
+	{
+		return (TreeModel)(this.model);
 		
 	}
+	
+	/**
+	 * 自分のモデルを応答する。
+	 */
 	
     /**
      * 描画メソッド(継承関係により、この場においては自動実行型の描画用メソッドとの認識で良い？)
      * ほぼ流用6/13虎谷
      * BufferedImageへの描画にしてみた。:144524 小林 2013/6/20
+	 * 最適化を実施　元のMVCを最大限活用 虎谷　7/13
      **/
     public void paintComponent(Graphics aGraphics)
     {
+		this.paintTree();
         super.paintComponent(aGraphics);
-        treeImage=this.paintTree(aGraphics2D);
-        //aGraphics.drawImage(treeImage , offset.x , offset.y ,this);
-		viewport=this.scrollAmount();
-		aGraphics.drawImage(treeImage , -viewport.x , -viewport.y ,this);
+        //treeImage=this.paintTree(aGraphics2D);
+		//viewport=this.scrollAmount();
+		//aGraphics.drawImage(treeImage , -viewport.x , -viewport.y ,this);
     }
     
     /**
      * モデル体の情報を利用して画像を構成する描画メソッド。
      * 小林祐希 144524 2013/6/20
-     * 
+     * 虎谷　7/13 直接モデル受け渡しスタイル=>　モデルに一旦格納スタイルへ
      * 
      **/
-	private BufferedImage paintTree(Graphics2D aGraphics2D)
+	private void paintTree()
+	//private BufferedImage paintTree(Graphics2D aGraphics2D)
 	{
-        int width = this.getWidth();
-		int height = this.getHeight();
-            //BufferedImage picture = model.picture();//何か元から置いてあった。ここのModelのフィールドpictureって、どこで代入処理(設定処理)されてるの？
+		TreeModel aModel=getModel();
+        int width =(int) aModel.getDimension().getWidth();
+		int height =(int) aModel.getDimension().getHeight();
         BufferedImage picture=new BufferedImage(width,height,BufferedImage.TYPE_INT_BGR);
-        if (model == null)
-        {
-            return picture;//何も描画されてないものを返す。
-        }
-        aGraphics2D=picture.createGraphics();
+        Graphics g=picture.createGraphics();
+        //aGraphics2D.setBackground(Color.WHITE);
+        //aGraphics2D.clearRect(0,0,width,height);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, width, height);
+        g.setColor(Color.BLACK);
+		//g.setFont(aFont);
 		
-		
-        
-        aGraphics2D.setBackground(Color.WHITE);
-        aGraphics2D.clearRect(0,0,width,height);
-        /*  aGraphics2D.setColor(Color.WHITE);//背景色設定の代わり？
-		    aGraphics2D.fillRect(0, 0, width, height);    */
-        aGraphics2D.setColor(Color.BLACK);
-		
-		//==============仮作成部=====================
+		//==============作画部=====================
 		for(Map.Entry<Integer,TreeNode> e : aModel.nodes.entrySet())//トップノード表示
 		{
 			TreeNode node = e.getValue();
 			int X = (int)node.getTarget().getX();
 			int Y = (int)node.getTarget().getY();
-			//aGraphics2D.setFont(aFont);
-			aGraphics2D.drawString(node.getDate(),X,Y);
-			aGraphics2D.drawRect(X-1,Y-12, (int)node.desideWidth().getX()+2, 14);
+			g.setFont(aFont);
+			g.drawString(node.getDate(),X,Y);
+			g.drawRect(X-1,Y - node.getHeight(), node.getWidth()+2, node.getHeight()+node.getDescent());
+			//各定数は誤差修正用
 		}
 		for(TreeBranch branch : aModel.branchs)
 		{
@@ -129,13 +140,17 @@ public class TreeView extends mvc.View
 			int Y1 = (int)branch.getParentP().getY();
 			int X2 = (int)branch.getChildP().getX();
 			int Y2 = (int)branch.getChildP().getY();
-			aGraphics2D.drawLine(X1+1,Y1,X2-1,Y2);
+			g.drawLine(X1+1,Y1,X2-1,Y2);
+			//各定数は誤差修正用
 		}
 		//==========================================
 		
-        aGraphics2D.dispose();
-		return picture;
+        g.dispose();
+		aModel.picture(picture);
+		return;
 	}
-
-
+	
+	
+	
+	
 }

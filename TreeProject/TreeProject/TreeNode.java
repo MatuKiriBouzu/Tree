@@ -1,14 +1,6 @@
 package TreeProject;
 
-import java.awt.Graphics2D;
-import java.awt.image.*;
-import java.io.File;
-import javax.imageio.*;
-
 import java.awt.Point;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;//文字列幅を取得するために必要
 
 public class TreeNode{
 	
@@ -19,9 +11,10 @@ public class TreeNode{
 	
 	/**
 	 * 単語ナンバー
+	 *
 	 **/
-    int number;
-	
+    //int number;
+	//ハッシュ方式採用のため、ナンバー取り消し 7/14
 	/**
 	 * 配置座標
 	 **/
@@ -31,6 +24,11 @@ public class TreeNode{
 	 * 階層
 	 **/
     int level;
+	
+	/**
+	 * 文字の高さ、幅、ベースラインから一番下までの長さ
+	 **/
+    int height,width,descent;
 	
     /**
      *-getter 虎谷　6/13
@@ -44,28 +42,63 @@ public class TreeNode{
      * TreeBranchのコンストラクタ。
 	 *　引数よりTreeNodeを作成する
 	 * 虎谷　144858 2013/6/13　動作確認まで
+	 * ハッシュ方式採用のため、ナンバー取り消し 7/14
      **/
-    TreeNode(int number,String word)
-    {
-		this.number = number;
-		this.date = word;
-    }
+    //TreeNode(int number,String word)
+    //{
+	//	this.number = number;
+	//	this.date = word;
+    //}
 	TreeNode(String aString,int level){
 		this.level = level;
 		this.date = aString;
+		//desideSize();
+	}
+	
+	public void setNodeSize(int width,int height,int descent){
+		this.width = width;
+		this.height = height;
+		this.descent = descent;
+		return;
 	}
 	
     /**
      * getter 虎谷　6/13
+	 * ハッシュマップ方式採用のため、ナンバー取り消し 7/14
      **/
-    public int getNumber()
+	/*
+	 public int getNumber()
+	 {
+	 return this.number;   
+	 }
+	 public void setNumber(int num)
+	 {
+	 this.number=num;
+	 }
+	 */
+	
+	/**
+     * getter 虎谷　7/14
+     **/
+    public int getWidth()
     {
-		return this.number;   
+		return width;   
     }
-	public void setNumber(int num)
-	{
-		this.number=num;
-	}
+	/**
+	  * getter 虎谷　7/14
+	  **/
+    public int getHeight()
+    {
+		return height;   
+    }
+	/**
+	 * getter 虎谷　7/14
+	 **/
+    public int getDescent()
+    {
+		return descent;   
+    }
+	
     /**
      * getter 虎谷　6/13
      **/
@@ -103,27 +136,25 @@ public class TreeNode{
         return null;
     }
 	
-
+	
 	/**
-     *-setter getter 文字列長さ　虎谷　6/18
+     *-setter getter 文字列長さ,高さ　虎谷　6/18
+	 * 虎谷　7/14 定義変更、関数名より変更
+	 * モデルへ機能移転 7/14
      **/
-    public Point desideWidth(){
-		//System.out.println("=確認=");
+    /*public void desideSize(){
 		
 		BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = BI.createGraphics();
-		Font aFont=new Font("TimesRoman",Font.ITALIC,10);//===============仮作成　虎谷　７/１１
-		//FontMetrics fm = g2d.getFontMetrics();
+		Graphics aGraphics = BI.createGraphics();
+		Font aFont=new Font("Serif",Font.PLAIN,12);//===============課題条件　虎谷　７/14
+		FontMetrics fm = aGraphics.getFontMetrics(aFont);
 		
-		//Point point = new Point(fm.stringWidth(date),0);//定数8
-		Point point = new Point((date.length())*8,0);//定数8
-		if(target!=null){
-			point = new Point((date.length())*8,(int)this.target.getY()-5);//定数8
-			//point = new Point(fm.stringWidth(date),(int)this.target.getY()-5);//定数8
-		}
+		width = fm.stringWidth(date);
+		height = fm.getHeight();
 		
-        return point;
-    }
+		aGraphics.dispose();
+        return;
+    }*/
 	/**
      *-setter
 	 * 虎谷　6/13　追加

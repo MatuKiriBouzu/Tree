@@ -1,6 +1,7 @@
 package TreeProject;
 
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 public class TreeController extends mvc.Controller{
 	
@@ -12,115 +13,24 @@ public class TreeController extends mvc.Controller{
 	{
 		super();
 	}
-	
 	/**
-	 * TreeProjectのモデルを保持するフィールド。
-	 * DeguchiShin 144849 6/10 記述
-	 **/
-	//private TreeModel model;
-	
-	/**
-	 * TreeProjectのビューを保持するフィールド。
-	 * DeguchiShin 144849 6/10 記述
-	 **/
-	//private TreeView view;
-	
-	/**
-	 * これなんでっしょ
-	 **/
-	//Point previous;
-	
-	/**
-	 * わからんです
+	 * 自分のモデルを応答する。
 	 */
-	//Point curent;
-	
-	/**
-	 * マウスクリック時に応答するメソッド。
-	 * DeguchiShin 144849 6/10 スタブ作成
-	 **
-	public void mouseClicked()
+	public TreeModel getModel()
 	{
-		return;
+		return (TreeModel)(this.model);
 	}
 	
 	/**
-	 * マウスドラッグ時に応答するメソッド。
-	 * DeguchiShin 144849 6/10 スタブ作成
-	 **
-	public void mouseDragged()
+	 * 指定されたマウスイベントからマウスカーサの位置を獲得して、モデル座標系でのクリック位置を割り出して標準出力に出力する。
+	 * 良好（2010年7月25日）
+	 * 7/14　樹状整列ようにオーバーライドを実施、
+	 */
+	public void mouseClicked(MouseEvent aMouseEvent)
 	{
+		Point aPoint = aMouseEvent.getPoint();
+		aPoint.translate(view.scrollAmount().x, view.scrollAmount().y);
+		getModel().outTextSearch(aPoint);
 		return;
 	}
-	
-	/**
-	 * わからんです
-	 **
-	public void mouseEntered()
-	{
-		return;
-	}
-	
-	/**
-	 * わけわかめ
-	 **
-	public void mouseExited()
-	{
-		return;
-	}
-	
-	/**
-	 * マウスの移動時に応答するメソッド。
-	 * DeguchiShin 144849 6/10 スタブ作成
-	 **
-	public void mouseMoved()
-	{
-		return;
-	}
-	
-	/**
-	 * マウスプレス時(押し続けている状態)に応答するメソッド。
-	 * DeguchiShin 144849 6/10 スタブ作成
-	 **
-	public void mousePressed()
-	{
-		return;
-	}
-	
-	/**
-	 * マウスリリース時(プレスの解除時)に応答するメソッド。
-	 * DeguchiShin 144849 6/10 スタブ作成
-	 **
-	public void mouseReleased()
-	{
-		return;
-	}
-	
-	/**
-	 * mvcのモデルを設定するメソッド。
-	 * DeguchiShin 144849 6/3 スタブ作成
-	 **
-	public void setModel(TreeModel model)
-	{
-		return;
-	}
-	
-	/**
-	 * mvcのビューを設定するメソッド。
-	 * DeguchiShin 144849 6/3 スタブ作成
-	 **
-	public void setView(TreeView view)
-	{
-		return;
-	}
-	
-	/**
-	 * 自身を文字列として応答するメソッド。
-	 * DeguchiShin 144849 6/10 スタブ作成
-	 **
-	public void toString(String aString)
-	{
-		return;
-	}
-*/	
 }

@@ -1,4 +1,5 @@
 package TreeProject;
+
 import java.util.Map;
 import java.awt.Point;
 import java.awt.Dimension;
@@ -10,38 +11,50 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.Font;
 //↑追記部分 虎谷6/13
 
 public class Example {
-
+	
 	public static void main(String[] args)
 	{
-		TreeModel aModel = new TreeModel();
-		TreeNode aNode = null;
-		TreeBranch aBranch = null;
-		aModel.inputTree("aaaa");//view展開前に先にデータの読み込み、体裁を整えておく
+		Font aFont=new Font("Serif",Font.PLAIN,12);//要求仕様
+		boolean process = false;//アニメーションのオンオフ
+		Dimension aDimension = new Dimension(800,700);//ウインドウサイズ
+		String date = "./TreeProject/tree.txt";
 		
-		for(Map.Entry<Integer,TreeNode> e : aModel.nodes.entrySet())//トップノード表示
-		{
-			TreeNode buf = e.getValue();
-			int i  =e.getKey();
-			System.out.println("key:"+i+" Value:"+buf.date+" Level:"+buf.level);
+		//String date = "./TreeProject/tree.txt";
+		//String date = "./TreeProject/forest.txt";
+		
+		
+		if(args.length==1){
+			date = args[0];
 		}
+		String[] aStrings = null;
+		aStrings = date.split("/");
+		String title = (aStrings[aStrings.length-1]);
+			
+		TreeModel aModel = new TreeModel();
+		aModel.setFont(aFont);
+		TreeController aController = new TreeController();
+		aModel.inputTree(date);//view展開前に先にデータの読み込み、体裁を整えておく
 		
-		TreeView aView= new TreeView(aModel);
-		Dimension aDimension = new Dimension(1250,700);
-		Example.open(aView,aDimension);
-		//↑追記部分 虎谷6/13
-		//aModel.animationTree();
-		aModel.calculateTree();//アニメーション用に切る
+		/*for(Map.Entry<Integer,TreeNode> e : aModel.nodes.entrySet())//トップノード表示
+		 {
+		 TreeNode buf = e.getValue();
+		 int i  =e.getKey();
+		 System.out.println("key:"+i+" Value:"+buf.date+" Level:"+buf.level);
+		 }*/
 		
-		//aBranch = (TreeBranch)aModel.branchs.get(1);
-		//System.out.println(aBranch.parent);
+		TreeView aView= new TreeView(aModel,aController);
+		Example.open(aView,aDimension,title);
+		aModel.calculateTree(process);
+		System.out.println("疑問点：ブランチ間の交差は容認されるものなのか？(semilattice.txtにて発生)");
 	}
 	
-	private static void open(TreeView aView, Dimension aDimension)
+	private static void open(TreeView aView, Dimension aDimension,String title)
 	{
-		JFrame aWindow = new JFrame("Forest");
+		JFrame aWindow = new JFrame(title);
 		aWindow.getContentPane().add(aView);
 		aWindow.setMinimumSize(aDimension);
 		aWindow.setMaximumSize(aDimension);

@@ -6,7 +6,13 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.awt.Point;
-import java.util.Collections;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;//文字列幅を取得するために必要
+import java.awt.FontMetrics;
+
+
 //ID抜け問題に対策してプログラム大幅変更
 public class TreeModel extends mvc.Model
 {
@@ -47,7 +53,25 @@ public class TreeModel extends mvc.Model
 	 * Yの作画位置を次々下げてゆくために使用
 	 * 虎谷 6/13
 	 **/
-	private int countUpY = 20;
+	private int countDownY=0;
+	
+	
+	private int width,height,maxPointX=0;
+	
+	private Dimension aDimension;
+	
+	/**
+	 * font情報を保持
+	 * DeguchiShin 144849 6/10 仮記述
+	 **/
+	private Font aFont;
+	
+	
+	/**
+	 * アニメーションのON、OFF管理
+	 * 虎谷7/14
+	 **/
+	private boolean process=false;
 	
 	/**
 	 * コンストラクタ、親から引き継ぎを明確化
@@ -55,6 +79,35 @@ public class TreeModel extends mvc.Model
 	 **/
 	public TreeModel(){
 		super();
+	}
+
+	/**
+	 * getter
+	 * 虎谷 7/14
+	 **/
+	public Font getFont()
+	{
+		return aFont;
+	}
+	/**
+	 * setter
+	 * 虎谷 7/14
+	 **/
+	public void setFont(Font inFont)
+	{
+		this.aFont=inFont;
+		settingFontMetrics();
+		return;
+	}
+	
+	/**
+	 * getter
+	 * 虎谷 7/14
+	 **/
+	public Dimension getDimension()
+	{
+		aDimension = new Dimension(width,height);
+		return aDimension;
 	}
 	
 	/**
@@ -130,91 +183,32 @@ public class TreeModel extends mvc.Model
 		branchs.set(index,branch);
 	}
 	
+
 	/**
-	 ***************虎谷　1回め用
-	 *トップのブランチを見つけ出す。
-	 *虎谷　6/13
+	 * ブランチの接続位置計算　7/14完成
+	 * 虎谷
 	 **/
-	public void calculateTree()
-	{
-		{
-			for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
-			{
-				TreeNode topNode = e.getValue();
-				//System.out.println("=確認="+topNode.getDate()+" =階層="+topNode.getLevel());
-				if(topNode.getLevel()==0){
-					int number = e.getKey();
-					System.out.println("=確認="+topNode.getDate());
-					calculateTree(number,20);//20はx座標の初期位置、個々から子ノードまで足しあわせ
-				}
-			}
-			//==========↓作画処理↓===========
-			branchCalc();
-			super.changed();
-			//==========↑作画処理↑===========
-			
-			return;
-		}	
-	}
-	
-	int distanceX = 25;//Node間隔を定義//階層間距離←→
-	int distanceY = 16;//Node間隔を定義//階層間距離↑↓
-	
-	/**
-	 ***************虎谷　2回め以降用
-	 *TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する。
-	 *松きり坊主 144542 2013/6/3
-	 **/
-	
-	public void calculateTree(int number,int pointX)//(自ノードの)最終X座標
-	{
-		TreeNode node = nodes.get(number);
-		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
-		int childCount = 0;
-		int sumY=0;//子ノードのY座標を貯める
-		int pointY = countUpY;//最終Y座標 (初期値カウントアップYの数値)
-		node.setTarget(new Point(pointX,pointY));//暫定配置、子ノードがあれば後に再配置する
-		
-		for(TreeBranch branch : branchs)
-		{
-			if(branch.getParent()==number)
-			{
-				childCount++;
-				TreeNode childNode = nodes.get(branch.getChild());//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
-				calculateTree(branch.getChild(),nextPointX);
-				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
-				//System.out.println("=確認2S="+childNode.getDate());
-			}
-		}
-		//========↓Y座標決定処理↓=========
-		if(childCount==0)//子ノードがなければ
-		{
-			countUpY += 16;//Nodeの縦の並列間隔
-		}
-		else//子ノードがあればそれらの座標から自ノードの座標を決定する
-		{
-			pointY =(int)(sumY/childCount);
-		}
-		node.setTarget(new Point(pointX,pointY));
-		//========↑===========↑========
-		return;
-	}
-	
-	
 	
 	public void branchCalc(){
 		
 		for(TreeBranch branch : branchs)
 		{			
-			int p1 = (int)(nodes.get(branch.getParent()).getTarget().getX());
-			int p2 = (int)(nodes.get(branch.getParent()).desideWidth().getX());
-			int p3 = (int)(nodes.get(branch.getParent()).desideWidth().getY());
-			int c1 = (int)(nodes.get(branch.getChild()).getTarget().getX());
-			int c2 = (int)(nodes.get(branch.getChild()).desideWidth().getY());
-			branch.decideParentP(new Point(p1 + p2 , p3));
-			branch.decideChildP(new Point(c1 , c2));
+			int parentX = (int)(nodes.get(branch.getParent()).getTarget().getX());
+			int parentWidth = (int)(nodes.get(branch.getParent()).getWidth());
+			int parentY= (int)(nodes.get(branch.getParent()).getTarget().getY()
+						   -(nodes.get(branch.getParent()).getHeight()/2));//ノードの高さの中央に接続するため、Y座標から文字の高さ/2を引いている
+			int childX = (int)(nodes.get(branch.getChild()).getTarget().getX());
+			int childY = (int)(nodes.get(branch.getChild()).getTarget().getY()
+						   -(nodes.get(branch.getChild()).getHeight()/2));
+			branch.decideParentP(new Point(parentX + parentWidth , parentY)); //ブランチ前接続の座標
+			branch.decideChildP(new Point(childX , childY)); //ブランチ後接続の座標
 		}
 	}
+	
+	int fix = 2;//誤差修正用
+	int distanceX = 25  +fix;//Node間隔を定義//階層間距離←→ 　ここで設定
+	int distanceY = 2   +fix;//Node間隔を定義//階層間距離↑↓	  　ここで設定
+	int InitX = 20;//初期x位置
 	
 	/**
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
@@ -223,19 +217,26 @@ public class TreeModel extends mvc.Model
 	 * 削除予定。トップノード探索の後、アニメーションツリーに引き継ぎ 6/20　虎谷
 	 * 松きり坊主 144542 2013/7/11　移行準備完了、レベルによる親探索に変更済み
 	 **/
-	public void animationTree()
+	public void calculateTree(boolean flag)
 	{
+		process = flag;
 		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
 		{
 			TreeNode topNode = e.getValue();
-			//System.out.println("=確認="+topNode.getDate()+" =階層="+topNode.getLevel());
 			if(topNode.getLevel()==0){
 				int number = e.getKey();
-				System.out.println("=確認="+topNode.getDate());
-				animationTree(number,20);//20はx座標の初期位置、個々から子ノードまで足しあわせ
+				//System.out.println("=確認="+topNode.getDate()); //最上位親確認
+				calculateTree(number,InitX);
 			}
 		}
-		
+		if(process == false){
+			try{
+				super.changed();
+				Thread.sleep(5);//作画が追いつかないため
+			} catch (InterruptedException e) {e.printStackTrace();}
+		}
+		height = countDownY;
+		width = maxPointX;
 		return;
 	}	
 	/**
@@ -244,76 +245,116 @@ public class TreeModel extends mvc.Model
 	 * 松きり坊主 144542 2013/6/3
 	 * 定義する。間々に内部変更通知を出すようにして、viewに伝え、0.5秒待つ処理を組み込み済み 6/20 虎谷
 	 * ハッシュマップ対応可 7/12 虎谷
+	 * semi~に対応、２回めの計算を行わない
+	 * 虎谷 7/14 コードクローンが多すぎるため、アニメーションと統合
 	 **/
-	public void animationTree(int number,int pointX)//(自ノードの)最終X座標
+	public void calculateTree(int number,int pointX)//ID番号と現在のX座標を受け取る
 	{
 		TreeNode node = nodes.get(number);
-		int nextPointX = pointX + (int)node.desideWidth().getX() + distanceX;
-		int childCount = 0;
-		int sumY=0;//子ノードのY座標を貯める
-		int pointY = countUpY;//最終Y座標 (初期値カウントアップYの数値)
-		node.setTarget(new Point(pointX,pointY));//暫定配置、子ノードがあれば後に再配置する
-		//==========↓作画処理一度目↓===========
-		try{
-			branchCalc();
-			super.changed();
-			Thread.sleep(100);
-		} catch (InterruptedException e) {e.printStackTrace();}
-		//System.out.println("=確認1S="+node.getDate());
-		//==========↑作画処理一度目↑===========
+		int nextPointX = pointX + node.getWidth() + distanceX;
+		if(nextPointX>maxPointX){maxPointX = nextPointX;} //最も右に作画される位置を探す
 		
-		for(TreeBranch branch : branchs)
-		{
-			if(branch.getParent()==number)
-			{
-				childCount++;
-				TreeNode childNode = nodes.get(branch.getChild());//ブランチから子ノードの要素番号を取り、ノードリストから子ノードを取って、次のcalcに回す
-				animationTree(branch.getChild(),nextPointX);
-				sumY += (int)childNode.getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
-				//System.out.println("=確認2S="+childNode.getDate());
+		if((node.getTarget().getX()==InitX) && (nextPointX > node.getTarget().getX())){
+			//計算するノードが移動済み、または作画予定位置より深い場合　当処理を行わない
+			
+			int childCount = 0;
+			int sumY=0;//子ノードのY座標を貯める
+			int pointY = countDownY;//最終Y座標 (初期値カウントダウンYの数値)
+			node.setTarget(new Point(pointX,pointY));//暫定配置、子ノードがあれば後に再配置する
+			//==========↓作画処理一度目↓===========
+			branchCalc();
+			if(process == true){
+				try{
+					super.changed();
+					Thread.sleep(100);
+				} catch (InterruptedException e) {e.printStackTrace();}
 			}
-		}
-		//========↓Y座標決定処理(必要があれば作画処理２度目)↓=========
-		if(childCount==0)//子ノードがなければ
-		{
-			countUpY += 16;//Nodeの縦の並列間隔
-			node.setTarget(new Point(pointX,pointY));
-		}
-		else//子ノードがあればそれらの座標から自ノードの座標を決定する
-		{
-			pointY =(int)(sumY/childCount);
-			node.setTarget(new Point(pointX,pointY));
-			try{
+			//==========↑作画処理一度目↑============================
+			//==========↓子ノードの計算↓============================
+			for(TreeBranch branch : branchs)
+			{
+				if(branch.getParent()==number)
+				{
+					childCount++;
+					calculateTree(branch.getChild(),nextPointX);//ブランチから子ノードの要素番号を取り、それを次のcalcに回す
+					sumY += (int)nodes.get(branch.getChild()).getTarget().getY();//子ノードを調べ終えたらそのY座標を自ノードのために足し込む
+				}
+			}
+			//==========↑子ノードの計算↑============================
+			//========↓Y座標決定処理(必要があれば作画処理２度目)↓=========
+			if(childCount==0)//子ノードがなければ
+			{
+				countDownY += node.getHeight()+node.getDescent()+distanceY;
+				node.setTarget(new Point(pointX,pointY));
+			}
+			else//子ノードがあればそれらの座標から自ノードの座標を決定する
+			{
+				pointY =(int)(sumY/childCount);
+				node.setTarget(new Point(pointX,pointY));
+				
 				branchCalc();
-				super.changed();
-				Thread.sleep(100);
-			} catch (InterruptedException e) {e.printStackTrace();}
-			//System.out.println("=確認2S="+node.getDate());
+				if(process == true){
+					try{
+						super.changed();
+						Thread.sleep(100);
+					} catch (InterruptedException e) {e.printStackTrace();}
+				}
+				
+			}
+			//========↑===========↑========
 		}
-		//========↑===========↑========
 		return;
 	}
+	
+	/**
+	 * 標準出力に単語を出力するため、クリック座標を受け取って適合があるか調べる 7/14　虎谷
+	 **/
+	public void outTextSearch(Point aPoint)
+	{
+		int pointX = (int)aPoint.getX();
+		int pointY = (int)aPoint.getY();
+		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
+		{
+			TreeNode node = e.getValue();
+			
+			int nodeX = (int)node.getTarget().getX();
+			int nodeY = (int)(node.getTarget().getY());
+			
+			if((nodeX-1 < pointX) && (pointX < (nodeX + node.getWidth()+2)) &&
+			   ((nodeY - node.getHeight()) < pointY) && (pointY < nodeY+node.getDescent()))
+				//各定数は誤差修正用
+			{
+				int number = e.getKey();
+				//System.out.println(aPoint);
+				System.out.println(node.getDate());
+				break;
+			}
+		}
+		return;
+	}
+	
+	
 	
 	
 	/**
 	 * ファイルからそれぞれの情報を読み取る
 	 * 松きり坊主 144542 2013/6/3
 	 * 虎谷 144858 2013/6/13node部　動作確認まで
-	 *松きり坊主 144542 2013/7/9
+	 * 松きり坊主 144542 2013/7/9
 	 * 追記　虎谷 6/20 ノード初期位置を定義（左に立て一列に配置）
+	 * 虎谷 7/14 文字幅エラー原因修正、ブランチの計算を当メソッドの最後で行う
 	 **/
 	/*
 	 inputTree作り直し
 	 */
 	public void inputTree(String fileName)	
 	{
+		int maxLevel=0,maxWidth=0;
 		try
 		{
 			ArrayList<TreeNode> bufNodes = new ArrayList<TreeNode>();
 			
-			FileReader fr = new FileReader("./TreeProject/tree.txt");
-			//FileReader fr = new FileReader("./TreeProject/forest.txt");
-			//FileReader fr = new FileReader("./TreeProject/semilattice.txt");
+			FileReader fr = new FileReader(fileName);
 			
 			
 			BufferedReader br = new BufferedReader(fr);
@@ -331,9 +372,18 @@ public class TreeModel extends mvc.Model
 					String bufString = null;
 					levelCount = inputNodeLevel(aString);
 					bufString = inputNodeString(aString);
+					int nodeWidth = desideWidthSize(bufString);
+					int nodeHeight = desideHeightSize();
+					int nodeDescent = desideDescentSize();
 					abuffer = new TreeNode(bufString,levelCount);
+					abuffer.setNodeSize(nodeWidth,nodeHeight,nodeDescent);
 					bufNodes.add(abuffer);					
 					//System.out.println("おっぱい"+ans+"おっぱい"+bufString);
+					
+					//Treeサイズ決定処理　最も長い単語＊最も大きい階層の数により、当Treeの理論最大サイズが求められる
+					if(abuffer.getWidth()>maxWidth){maxWidth = abuffer.getWidth();}
+					System.out.println("====max:"+maxWidth);
+					if(levelCount>maxLevel){maxLevel = levelCount;}
 				}
 				else if(aString.matches("[0-9]*, [a-zA-Z]*"))
 				{
@@ -341,7 +391,6 @@ public class TreeModel extends mvc.Model
 					//	abuffer = this.inputNode(aString);
 					//	this.nodes.add(abuffer);
 					inputNodeNumber(aString,bufNodes);
-					
 				}
 				else if(aString.matches("[0-9]*, [0-9]*"))
 				{
@@ -357,6 +406,10 @@ public class TreeModel extends mvc.Model
 		{
 			System.out.println(e);
 		}
+		branchCalc();//View生成時に作画を行なっている？ため、先にブランチの位置を決定しておく
+		height = nodesMax;
+		width = (maxWidth + distanceX)* maxLevel;
+		aGraphics.dispose();//文字幅取得のため用いたグラフィックスを閉じる
 	}
 	
 	public int inputNodeLevel(String aString){
@@ -391,75 +444,53 @@ public class TreeModel extends mvc.Model
 		number = Integer.parseInt(aStrings[0]);
 		word = (aStrings[1]);
 		for(TreeNode i:bufNodes){
+			//int count= -1;
+			//count++;
 			if(i.getDate().equals(word)){//レベル探索で用いたbufNodesのリストより、wordが同じ物にレベルを入れる
+				//if(i.getDate()!n=null)
+				if(countDownY==0){countDownY=i.getHeight()+distanceY;}
+				i.setTarget(new Point(InitX,nodesMax));//初期位置の決定
 				this.nodes.put(number,i);
-				i.setTarget(new Point(20,(nodesMax*20+10)));//初期位置の決定
-				i.setNumber(number);
-				nodesMax++;//ハッシュマップ用ではなく、初期位置決定用、IDから位置を求める場合ID歯抜けがある場合初期位置も歯抜けになるため
+				//i.setNumber(number);
+				nodesMax += i.getHeight()+i.getDescent()+distanceY;
+				
+				bufNodes.remove(i);//同一単語重複処理回避
+				//bufNodes.remove(count);//こっちのほうが早い？
+				break;
 			}
 		}		
 	}
-	/**
-	 * View,Controllerに報告する.
-	 * 松きり坊主 144542 2013/6/3
-	 * オーバーライドを取り消し　6/20 虎谷
-	 **/
-	//public void changed()
-	//	 {
-	//	 Iterator anIterator = dependents.iterator();
-	//	 while (anIterator.hasNext())
-	//	 {
-	//	 TreeView aView = (TreeView)anIterator.next();
-	//	 aView.update();
-	//	 }
-	//	 return;
-	//	 }
-	//	 
-	/**
-	 * 描画する。
-	 * 松きり坊主 144542 2013/6/3
-	 * 虎谷 6/13 暫定削除
-	 **/
-	//public void picture()
-	//{
-	//	return;
-	//}
+	
+	BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+	Graphics aGraphics = BI.createGraphics();
+	FontMetrics fm;
+	private void settingFontMetrics(){fm = aGraphics.getFontMetrics(aFont);}//7/14 虎谷FontMetrics生成
+	private int desideWidthSize(String aStrings){return fm.stringWidth(aStrings);}
+	private int desideHeightSize(){return fm.getHeight();}
+	private int desideDescentSize(){return fm.getDescent() ;}
+
 	
 	
 	/*======元トップノード探索=========*
-	public void animationTree()
-	{
-		//	int distanceX = 20;//Node間隔を定義
-		//		int distanceY = 20;//Nodeの縦の並列間隔を定義
-		//		
-		//		
-		//		//====↓ここからトップノード探索
-		//		ArrayList<TreeNode> topNode = new ArrayList<TreeNode>(nodes);//トップのみを格納したノードリストを作るため、一旦ノードをコピー
-		//		for(TreeBranch branch : branchs)//すべてのブランチから検索
-		//		{
-		//			for(TreeNode node : topNode)//トップノードを回す(全てのトップノードから検索)
-		//			{
-		//				//System.out.println("=====: "+node.getNumber()+" "+branch.getChild());//確認用
-		//				if(node.getNumber() == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
-		//				{
-		//					topNode.remove(node);//トップリストから取り除く
-		//					//System.out.println("=削除=");
-		//					break;//削除が完了したら抜ける(でないとエラーが生じる)
-		//				}
-		//			}
-		//		}
-		
-		for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
-		{
-			TreeNode buf = e.getValue();
-			if(buf.getLevel()==0){
-				animationTree(buf,20);
-			}
-		}
-		//====↑ここまで
-		
-		return;
-	}	
+	 public ArrayList<int> topNodeSearch()
+	 {
+	 		ArrayList<int> topNode = new ArrayList<int>();//トップのみを格納したノードリストを作るため、一旦ノードをコピー
+	 		for(TreeBranch branch : branchs)//すべてのブランチから検索
+	 		{
+				for(Map.Entry<Integer,TreeNode> e : this.nodes.entrySet())//トップノード表示
+				{
+					int key = e.getKey();
+					if(key == branch.getChild())//トップノードにブランチの子と同じ物があれば削除(トップノードは上にブランチが繋がっていないため、ブランチの子に設定されない)
+	 //				{
+	 //					topNode.remove(node);//トップリストから取り除く
+	 //					//System.out.println("=削除=");
+	 //					break;//削除が完了したら抜ける(でないとエラーが生じる)
+	 //				}
+	 //			}
+	 //		}
+	 //====↑ここまで
+	 
+	 return ArrayList;
+	 }	
 	 */
-	
 }
