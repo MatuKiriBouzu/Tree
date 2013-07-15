@@ -68,7 +68,7 @@ public class Example {
 		JFrame aWindow = new JFrame(title);
 		
 		JMenuBar menubar = new JMenuBar();
-		JMenu menu = new JMenu("ファイル");
+		JMenu menu = new JMenu("TreeProject");
 		JMenuItem menuItem1 = new JMenuItem("開く");
 		JMenuItem menuItem2 = new JMenuItem("終了");
 		
