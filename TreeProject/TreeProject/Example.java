@@ -1,5 +1,14 @@
 package TreeProject;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JFrame;
+import java.awt.Container;
+
 import java.util.Map;
 import java.awt.Point;
 import java.awt.Dimension;
@@ -19,12 +28,10 @@ public class Example {
 	public static void main(String[] args)
 	{
 		Font aFont=new Font("Serif",Font.PLAIN,12);//要求仕様
-		boolean process = true;//アニメーションのオンオフ
+		boolean process = false;//アニメーションのオンオフ
 		Dimension aDimension = new Dimension(800,700);//ウインドウサイズ
-		String date = "./TreeProject/tree.txt";
 		
-		//String date = "./TreeProject/tree.txt";
-		//String date = "./TreeProject/forest.txt";
+		String date = "./ExampleText/tree.txt";//デフォルトでこのテキストを呼び出し、後でユーザに読み込みをしてもらう
 		
 		
 		if(args.length==1){
@@ -55,6 +62,34 @@ public class Example {
 	private static void open(TreeView aView, Dimension aDimension,String title)
 	{
 		JFrame aWindow = new JFrame(title);
+		
+		JMenuBar menubar = new JMenuBar();
+		JMenu menu = new JMenu("ファイル");
+		JMenuItem menuItem1 = new JMenuItem("開く");
+		JMenuItem menuItem2 = new JMenuItem("終了");
+		
+		menu.add(menuItem1);
+		menu.add(menuItem2);
+		menubar.add(menu);
+		aWindow.setJMenuBar(menubar);
+		Container contentPane = aWindow.getContentPane();
+		
+		//aWindow.addMouseListener(this);
+		
+		menuItem1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent anActionEvent)
+			{
+				System.out.println("開く");//ここにロード時の処理を書く
+			}
+	    });
+		
+		menuItem2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent anActionEvent)
+			{
+				System.exit(0);
+			}
+	    });
+		
 		aWindow.getContentPane().add(aView);
 		aWindow.setMinimumSize(aDimension);
 		aWindow.setMaximumSize(aDimension);
