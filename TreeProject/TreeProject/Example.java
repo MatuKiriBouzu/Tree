@@ -19,7 +19,7 @@ public class Example {
 	public static void main(String[] args)
 	{
 		Font aFont=new Font("Serif",Font.PLAIN,12);//要求仕様
-		boolean process = false;//アニメーションのオンオフ
+		boolean process = true;//アニメーションのオンオフ
 		Dimension aDimension = new Dimension(800,700);//ウインドウサイズ
 		String date = "./TreeProject/tree.txt";
 		
