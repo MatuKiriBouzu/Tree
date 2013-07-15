@@ -8,6 +8,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JFrame;
 import java.awt.Container;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 import java.util.Map;
 import java.awt.Point;
@@ -80,6 +84,18 @@ public class Example {
 			public void actionPerformed(ActionEvent anActionEvent)
 			{
 				System.out.println("開く");//ここにロード時の処理を書く
+				
+				//試験的に導入(7/15)
+				JFileChooser fileChooser = new JFileChooser();
+				FileFilter fileFilter = new FileNameExtensionFilter("Text (*.txt)", "txt");
+				fileChooser.addChoosableFileFilter(fileFilter);
+				int answer = fileChooser.showOpenDialog(null);
+				//if(answer != JFileChooser.APPROVE_OPTION) return;
+				File aFile = fileChooser.getSelectedFile();
+				
+				System.out.println(aFile);
+				//このファイルを適切な位置に受け渡してくださいな 2013.7.15 出口
+				
 			}
 	    });
 		
