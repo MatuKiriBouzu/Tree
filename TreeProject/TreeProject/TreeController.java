@@ -6,15 +6,17 @@ import java.awt.event.MouseEvent;
 public class TreeController extends mvc.Controller{
 	
 	/**
-	 * TreeProjectのコントローラ。
+	 * TreeProjectのコントローラ。親コンストラクタに任せる
 	 * DeguchiShin 144849 6/3 スタブ作成
 	 */
 	public TreeController() 
 	{
 		super();
 	}
+    
 	/**
-	 * 自分のモデルを応答する。
+	 * 自分のモデルをTreeModel型として応答する。
+     * 7/19　虎谷
 	 */
 	public TreeModel getModel()
 	{
@@ -24,7 +26,7 @@ public class TreeController extends mvc.Controller{
 	/**
 	 * 指定されたマウスイベントからマウスカーサの位置を獲得して、モデル座標系でのクリック位置を割り出して標準出力に出力する。
 	 * 良好（2010年7月25日）
-	 * 7/14　樹状整列ようにオーバーライドを実施、
+	 * 7/14　樹状整列ようにオーバーライドを実施、親メソッドの処理の後位置情報をモデルに渡す。
 	 */
 	public void mouseClicked(MouseEvent aMouseEvent)
 	{
