@@ -46,22 +46,24 @@ public class TreeModel extends mvc.Model
 	 **/
 	private int nodesMax = 0;
 	
-	/**
-	 * ブランチ群の最大数を保持するフィールド。
-	 * DeguchiShin 144849 6/10 記述
-	 **/
-	private int branchsMax = 10;
 
 	/**
-	 * Yの作画位置を次々下げてゆくために使用
+	 * 末端ノードの作画位置Yを次々下げてゆくために使用
 	 * 虎谷 6/13
 	 **/
 	private int countDownY=0;
 	
-	
-	private int width,height,maxPointX=0;
-	
-	private Dimension aDimension;
+	/**
+	 * 当ツリーの大きさを保持するフィールド
+	 * 虎谷 7/19
+	 **/
+	private int width,height;
+    
+	/**
+	 * アニメーション後に当ツリーの大きさを適切に変更するために一番X座標の大きい末端ノードを保持する。
+	 * 虎谷 7/19
+	 **/
+	private int maxPointX=0;
 	
 	/**
 	 * font情報を保持
@@ -124,7 +126,7 @@ public class TreeModel extends mvc.Model
 	 **/
 	public Dimension getDimension()
 	{
-		aDimension = new Dimension(width,height);
+		Dimension aDimension = new Dimension(width,height);
 		return aDimension;
 	}
     
@@ -411,11 +413,12 @@ public class TreeModel extends mvc.Model
             {//レベル探索で用いたbufNodesのリストより、wordが同じ物にレベルを入れる
 				if(countDownY==0)
                 {
-                    countDownY=i.getHeight()+distanceY;
+                    countDownY=i.getHeight()+i.getDescent()+distanceY;//一つ目の末端ノードのY座標,また、ノード1つ分大きさ
+                    nodesMax = countDownY;
                 }
 				i.setTarget(new Point(InitX,nodesMax));//初期位置の決定
 				this.nodes.put(number,i);
-				nodesMax += i.getHeight()+i.getDescent()+distanceY;
+				nodesMax += countDownY;//ノード1つ分座標を下げる
 				
 				bufNodes.remove(i);//同一単語重複処理回避
 				break;

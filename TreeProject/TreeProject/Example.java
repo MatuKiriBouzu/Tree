@@ -43,7 +43,6 @@ public class Example {
 		if(answer != JFileChooser.APPROVE_OPTION)
 		{
 			filePath = "./ExampleText/tree.txt";
-            filePath = "./ExampleText/semilattice.txt";
 		}else{
             File aFile = fileChooser.getSelectedFile();
             filePath = aFile.getPath();
