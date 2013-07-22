@@ -8,6 +8,7 @@
   <property name="destdir" value="./Classes" />
   <property name="docdir" value="./JavaDoc" />
   <property name="instdir" value="./${ant.project.name}.app/Contents/Resources/Java" />
+  <property name="textdir" value="./ExampleText" />
   <property name="copyright" value="Copyright 2013 _G_Name_ All Right Reserved." />
   <property name="zipname" value="${ant.project.name}" />
   <property name="profile" value="java.hprof" />
@@ -77,6 +78,7 @@
 
   <target name="install" depends="all" description="install into application">
     <copy file="${package}.jar" todir="${instdir}" />
+    <copy file="${textdir}/tree.txt" todir="${instdir}" />
     <exec executable="chmod">
       <arg line="755 ${instdir}/../../MacOS/applet" />
     </exec>
