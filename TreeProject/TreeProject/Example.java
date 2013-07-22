@@ -47,18 +47,7 @@ public class Example {
 	 **/
 	public static void main(String[] args)
 	{
-		String filePath;
-		JFileChooser fileChooser = new JFileChooser();
-		FileFilter fileFilter = new FileNameExtensionFilter("Text (*.txt)", "txt");
-		fileChooser.addChoosableFileFilter(fileFilter);
-		int answer = fileChooser.showOpenDialog(null);
-		if(answer != JFileChooser.APPROVE_OPTION)
-		{
-			filePath = "./ExampleText/tree.txt";
-		}else{
-            File aFile = fileChooser.getSelectedFile();
-            filePath = aFile.getPath();
-        }
+		String filePath = fileOpen();
 		
 		//デフォルトでこのテキストを呼び出し、後でユーザに読み込みをしてもらう
 		TreeModel aModel = new TreeModel();
@@ -91,4 +80,31 @@ public class Example {
 		aWindow.setVisible(true);
 	}
 	//↑追記部分 虎谷6/13
+	
+	/**
+	 * 整列するテキストファイルのファイルパスを応答するメソッド。
+	 * 出口 テスト結果:良好(7/22)
+	 */
+	private static String fileOpen()
+	{
+		JFileChooser fileChooser = new JFileChooser();
+		FileFilter fileFilter = new FileNameExtensionFilter("Text (*.txt)", "txt");
+		fileChooser.addChoosableFileFilter(fileFilter);
+		int answer = fileChooser.showOpenDialog(null);
+		if(answer != JFileChooser.APPROVE_OPTION)
+		{
+			File aFile = new File("./tree.txt");
+			if(aFile.exists())
+			{ 
+				return aFile.toString(); //app実行時の場合
+			} else 
+			{
+				return "./ExampleText/tree.txt"; //make test時の場合
+			}
+		}else
+		{
+            File aFile = fileChooser.getSelectedFile();
+            return aFile.getPath();
+        }		
+	}
 }
