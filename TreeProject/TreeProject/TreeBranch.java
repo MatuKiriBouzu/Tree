@@ -4,8 +4,10 @@
  **/
 
 package TreeProject;
-
 import java.awt.Point;
+/**
+ 樹状構造の枝のクラス
+ **/
 
 public class TreeBranch{
     
@@ -23,13 +25,13 @@ public class TreeBranch{
 	 * 親ノードの接続位置情報
 	 *
      **/
-    private Point parentP;
+    private Point parentPoint;
     
     /**
 	 * 子ノードの接続位置情報
 	 *
      **/
-    private Point childP;
+    private Point childPoint;
     
     
     
@@ -49,9 +51,9 @@ public class TreeBranch{
      * 親ノードの接続地点をセットする
 	 * 虎谷 6/19
      **/
-    public void setParentP(Point point)
+    public void setParentPoint(Point point)
     {
-        parentP = point;
+        parentPoint = point;
 		return;
     }
     
@@ -59,9 +61,9 @@ public class TreeBranch{
      * 子ノードの接続地点をセットする
 	 * 虎谷 6/19
      **/
-    public void setChildP(Point point)
+    public void setChildPoint(Point point)
     {
-		childP = point;
+		this.childPoint = point;
         return;
     }
     
@@ -69,18 +71,18 @@ public class TreeBranch{
      * 親ノードの接続地点を返す
 	 * 虎谷 6/19
      **/
-	public Point getParentP()
+	public Point getParentPoint()
     {
-        return this.parentP;
+        return this.parentPoint;
     }
     
     /**
      * 子ノードの接続地点を返す
 	 * 虎谷 6/19
      **/
-	public Point getChildP()
+	public Point getChildPoint()
     {
-        return this.childP;
+        return this.childPoint;
     }
 	
     /**

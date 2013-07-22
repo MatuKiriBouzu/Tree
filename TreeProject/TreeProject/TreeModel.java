@@ -1,8 +1,3 @@
-/**
- * 7/12 小山 ノード情報のID抜け問題を想定して、ハッシュマップに切り替え
- * 7/19 虎谷 ブランチ
- **/
-
 package TreeProject;
 
 import java.util.Map;
@@ -18,7 +13,10 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;//文字列幅を取得するために必要
 import java.awt.FontMetrics;
 
-
+/**
+ 木の全体構成する.
+ TreeModelはTreeNode,TreeBranchを共にフィールドに持ち木を表現している。
+ **/
 public class TreeModel extends mvc.Model
 {
 	int fix = 2;//誤差修正用
@@ -29,7 +27,7 @@ public class TreeModel extends mvc.Model
 	 * ノード群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
 	 * <TreeNode>とpublicを書き足し　虎谷　6/13
-	 * ハッシュマップに切り替え 松きり坊主 144542 2013/7/12 
+	 * ハッシュマップに切り替え 小山 144542 2013/7/12 
 	 **/
 	private HashMap<Integer,TreeNode> nodes = new HashMap<Integer,TreeNode>();
 	
@@ -77,6 +75,24 @@ public class TreeModel extends mvc.Model
 	 * 虎谷7/14
 	 **/
 	private boolean process=false;
+	/**
+	 FontMetricsを作るために必要
+	 各ノードのStrigの長さを取得して四角形を描くためModel状でデータを取得してやらなければ行けない
+	 なのでFontMetricsが必要でありそのための変数
+	 **/
+	BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+	/**
+	 FontMetricsを作るために必要
+	 各ノードのStrigの長さを取得して四角形を描くためModel状でデータを取得してやらなければ行けない
+	 なのでFontMetricsが必要でありそのための変数
+	 **/
+	
+	Graphics aGraphics = BI.createGraphics();
+	/**
+	 FontMetricsで文字の長さを決定する。
+	 **/
+	
+	FontMetrics fm;
 	
 	/**
 	 * コンストラクタ、親から引き継ぎを明確化
@@ -146,17 +162,17 @@ public class TreeModel extends mvc.Model
 			int childX = (int)(nodes.get(branch.getChild()).getTarget().getX());
 			int childY = (int)(nodes.get(branch.getChild()).getTarget().getY()
 						   -(nodes.get(branch.getChild()).getHeight()/2));
-			branch.setParentP(new Point(parentX + parentWidth , parentY)); //ブランチ前接続の座標
-			branch.setChildP(new Point(childX , childY)); //ブランチ後接続の座標
+			branch.setParentPoint(new Point(parentX + parentWidth , parentY)); //ブランチ前接続の座標
+			branch.setChildPoint(new Point(childX , childY)); //ブランチ後接続の座標
 		}
 	}
 	
 	/**
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
 	 * アニメーションにする. トップノードをはじめに処理に放り込むメソッド
-	 * 松きり坊主 144542 2013/6/3
+	 * 小山 144542 2013/6/3
 	 * 削除予定。トップノード探索の後、アニメーションツリーに引き継ぎ 6/20　虎谷
-	 * 松きり坊主 144542 2013/7/11　移行準備完了、レベルによる親探索に変更済み
+	 * 小山 144542 2013/7/11　移行準備完了、レベルによる親探索に変更済み
 	 **/
 	public void calculateTree(boolean flag)
 	{
@@ -188,7 +204,7 @@ public class TreeModel extends mvc.Model
 	/**
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
 	 * アニメーションにする.トップノード以外の再帰による処理を行なっていく
-	 * 松きり坊主 144542 2013/6/3
+	 * 小山 144542 2013/6/3
 	 * 定義する。間々に内部変更通知を出すようにして、viewに伝え、0.5秒待つ処理を組み込み済み 6/20 虎谷
 	 * ハッシュマップ対応可 7/12 虎谷
 	 * semi~に対応、２回めの計算を行わない
@@ -301,9 +317,9 @@ public class TreeModel extends mvc.Model
 	
 	/**
 	 * ファイルからそれぞれの情報を読み取る
-	 * 松きり坊主 144542 2013/6/3
+	 * 小山 144542 2013/6/3
 	 * 虎谷 144858 2013/6/13node部　動作確認まで
-	 * 松きり坊主 144542 2013/7/9
+	 * 小山 144542 2013/7/9
 	 * 追記　虎谷 6/20 ノード初期位置を定義（左に立て一列に配置）
 	 * 虎谷 7/14 文字幅エラー原因修正、ブランチの計算を当メソッドの最後で行う
 	 **/
@@ -427,10 +443,6 @@ public class TreeModel extends mvc.Model
 	}
 	
     
-    //=========文字作画幅決定処理、およびその為のフィールド=============
-	BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-	Graphics aGraphics = BI.createGraphics();
-	FontMetrics fm;
     /**
 	 * フォント情報からフォントメトリクスを生成する
      * 7/14　虎谷

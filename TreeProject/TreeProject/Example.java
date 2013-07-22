@@ -26,13 +26,25 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.Font;
 //↑追記部分 虎谷6/13
-
+/**
+ 実行本体(main) 
+**/
 public class Example {
-	
-	static Font aFont=new Font("Serif",Font.PLAIN,12);//要求仕様
-	static boolean process = true;//アニメーションのオンオフ
+	/**
+	 仕様書の文字:Serif系の標準体(plain)で12pt
+	 **/
+	static final Font aFont=new Font("Serif",Font.PLAIN,12);//要求仕様
+	/**
+	 アニメーションのオンオフ
+	 **/
+	static boolean isViewProcess = true;
+	/**
+	 ウィンドウのサイズを固定する定数800*700とする。
+	 **/
 	static Dimension aDimension = new Dimension(800,700);//ウインドウサイズ
-	//static TreeView aView;
+	/**
+	 main
+	 **/
 	public static void main(String[] args)
 	{
 		String filePath;
@@ -56,11 +68,12 @@ public class Example {
 		
 		TreeView aView= new TreeView(aModel,aController);
 		Example.open(aView,aDimension,"樹状整列");
-		aModel.calculateTree(process);
+		aModel.calculateTree(isViewProcess);
 		System.out.println("疑問点：ブランチ間の交差は容認されるものなのか？(semilattice.txtにて発生)");
 	}
-
-	
+	/**
+	 樹状整列のBufferedImageを置くJPanelを開く
+	 **/
 	private static void open(TreeView aView, Dimension aDimension,String title)
 	{
 		JFrame aWindow = new JFrame(title);

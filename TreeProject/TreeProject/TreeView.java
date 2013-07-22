@@ -94,10 +94,10 @@ public class TreeView extends mvc.View
 		}
 		for(TreeBranch branch : aModel.getBranchs())
 		{
-			int X1 = (int)branch.getParentP().getX();
-			int Y1 = (int)branch.getParentP().getY();
-			int X2 = (int)branch.getChildP().getX();
-			int Y2 = (int)branch.getChildP().getY();
+			int X1 = (int)branch.getParentPoint().getX();
+			int Y1 = (int)branch.getParentPoint().getY();
+			int X2 = (int)branch.getChildPoint().getX();
+			int Y2 = (int)branch.getChildPoint().getY();
 			g.drawLine(X1+1,Y1,X2-1,Y2);
 			//各定数は誤差修正用
 		}

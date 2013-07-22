@@ -2,7 +2,9 @@ package TreeProject;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-
+/**
+ アプリケーションのGUIの応答関連
+ **/
 public class TreeController extends mvc.Controller{
 	
 	/**
