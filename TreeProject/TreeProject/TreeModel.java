@@ -19,10 +19,18 @@ import java.awt.FontMetrics;
  **/
 public class TreeModel extends mvc.Model
 {
-	int fix = 2;//誤差修正用
-	int distanceX = 25  +fix;//Node間隔を定義//階層間距離←→ 　ここで設定
-	int distanceY = 2   +fix;//Node間隔を定義//階層間距離↑↓	  　ここで設定
-	int InitX = 20;//初期x座標位置
+	/**
+	 x方向のNode間隔定数
+	 **/
+	private static final int distanceX = 25;
+	/**
+	 y方向のNode間隔定数
+	 **/
+	private static final int distanceY = 2 ;//Node間隔を定義//階層間距離
+	/**
+	 根(topNode)の作画の初期位置
+	 **/
+	private static final int InitX = 20;//初期x座標位置
 	/**
 	 * ノード群自体を保持するフィールド。
 	 * DeguchiShin 144849 6/10 記述
@@ -80,19 +88,19 @@ public class TreeModel extends mvc.Model
 	 各ノードのStrigの長さを取得して四角形を描くためModel状でデータを取得してやらなければ行けない
 	 なのでFontMetricsが必要でありそのための変数
 	 **/
-	BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage BI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 	/**
 	 FontMetricsを作るために必要
 	 各ノードのStrigの長さを取得して四角形を描くためModel状でデータを取得してやらなければ行けない
 	 なのでFontMetricsが必要でありそのための変数
 	 **/
 	
-	Graphics aGraphics = BI.createGraphics();
+	private Graphics aGraphics = BI.createGraphics();
 	/**
 	 FontMetricsで文字の長さを決定する。
 	 **/
 	
-	FontMetrics fm;
+	private FontMetrics fm;
 	
 	/**
 	 * コンストラクタ、親から引き継ぎを明確化
@@ -167,12 +175,15 @@ public class TreeModel extends mvc.Model
 		}
 	}
 	
-	/**
+	/*
 	 * TreeNode.TreeBranchのPoint情報からそれぞれの場所を計算する様子を
 	 * アニメーションにする. トップノードをはじめに処理に放り込むメソッド
 	 * 小山 144542 2013/6/3
 	 * 削除予定。トップノード探索の後、アニメーションツリーに引き継ぎ 6/20　虎谷
 	 * 小山 144542 2013/7/11　移行準備完了、レベルによる親探索に変更済み
+	 */
+	/**
+	 木構造の根(topNode)を探索する。
 	 **/
 	public void calculateTree(boolean flag)
 	{
@@ -377,7 +388,7 @@ public class TreeModel extends mvc.Model
 		aGraphics.dispose();//文字幅取得のため用いたグラフィックスを閉じる
 	}
 	/**
-	 * 与えられた文字列から階層情報を取り出し
+	 * ファイルからノードの階層情報を取得し返す。
      * 7/14　小山
 	 **/
 	public int inputNodeLevel(String aString){
@@ -387,7 +398,7 @@ public class TreeModel extends mvc.Model
 		return LevelCount;
 	}
     /**
-	 * 与えられた文字列から最後尾に格納されている単語を取り出し
+	 * ファイルからノードのデータ情報を取得します。
      * 7/14　小山
 	 **/
 	public String inputNodeString(String aString){
@@ -397,8 +408,8 @@ public class TreeModel extends mvc.Model
 		return  aStrings[aStrings.length-1];
 	}
     /**
-	 * ブランチ情報オブジェクト化
-     * 7/14　小山
+	 ブランチをファイルから読み込みインスタンス化する。
+	 7/14　小山
 	 **/
 	public TreeBranch inputBranch(String aString){
 		int parentNum,childNum;
@@ -412,8 +423,8 @@ public class TreeModel extends mvc.Model
 		
 	}
     /**
-	 * ノード情報オブジェクト化
-     * 7/14　小山
+	 ノード情報を読み込んでインスタンス化する。
+     7/14　小山
 	 **/
 	public void inputNodeNumber(String aString,ArrayList<TreeNode> bufNodes){
 		int number;
@@ -475,5 +486,5 @@ public class TreeModel extends mvc.Model
     {
         return fm.getDescent() ;
     }
-     //==========================================================
+   
 }
