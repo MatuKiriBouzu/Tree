@@ -5,7 +5,10 @@
  * 使えなかったので、scrollAmountから値を無理に取り出し、フィールドviewportで保持していた。
  * 現在は、ペイントコンポーネント呼び出し時、TreePaintを呼び、その中で成果物をmodelに格納し、
  * MVC本来の機能で親クラスのペイントコンポーネントでモデルからイメージを取り出し作画している
- */
+ * 
+ * 追記:
+ * javadoc対応重視のリファクタリング 小林祐希 13/07/23
+ **/
 
 package TreeProject;
 
@@ -20,6 +23,10 @@ import java.util.Map;
 import java.awt.Font;
 import java.awt.Dimension;
 
+
+/**
+ * 成果物(ツリーモデル)を受け取って描画する。
+ **/
 public class TreeView extends mvc.View
 {
     /**
@@ -31,7 +38,6 @@ public class TreeView extends mvc.View
     /**
      * コンストラクタ
      * 親で代入しているが、描画できなくなるのでもう一度上書き　間違っているかも6/13虎谷
-     * コンス"トラ"クタ……"虎"谷……深夜テンション小林
 	 * 修正完了。親から帰ってきたものを型変換の上格納　7/5　虎谷
      * 7/19 親クラスのコンストラクタを実行した上で、モデルからフォント情報を取り出し保持する。
      **/

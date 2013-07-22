@@ -5,12 +5,18 @@
  * 単語のピクセル長さを決定する処理はModelに委任、データは当フィールドで保持する
  *
  * 仕様変更により、多くのSetter,getterを削除(親ノード情報、子ノード情報等は必要がなくなった。)
+ * 
+ * 追記:
+ * javadoc対応重視のリファクタリング 小林祐希 13/07/23
  **/
 
 package TreeProject;
 
 import java.awt.Point;
 
+/**
+ * 木を構成する要素。枝ではなく節の部分。入力ファイルの文字列部分。
+ **/
 public class TreeNode{
 	
 	/**
@@ -29,10 +35,19 @@ public class TreeNode{
     private int level;
 	
 	/**
-	 * 文字の高さ、幅、ベースラインから一番下までの長さ
+	 * 文字の高さ
 	 **/
-    private int height,width,descent;
-	
+    private int height;
+    
+    /**
+     * 文字の幅
+     **/
+	private int width;
+    
+    /**
+     * ベースラインから一番下までの長さ
+     **/
+    private int descent;
     
 	/**
      * TreeBranchのコンストラクタ。
