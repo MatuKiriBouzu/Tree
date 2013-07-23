@@ -47,7 +47,15 @@ public class Example {
 	 **/
 	public static void main(String[] args)
 	{
-		String filePath = fileOpen();
+        //==================================変更点7/23====↓
+        radio aRadio = new radio();
+        String filePath = aRadio.selectFile();
+        if(filePath == null)
+        {
+            filePath = fileOpen();
+        }
+        String[] fileName = filePath.split("/");
+        //==================================変更点7/23====↑
 		
 		//デフォルトでこのテキストを呼び出し、後でユーザに読み込みをしてもらう
 		TreeModel aModel = new TreeModel();
@@ -56,7 +64,7 @@ public class Example {
 		aModel.inputTree(filePath);//view展開前に先にデータの読み込み、体裁を整えておく
 		
 		TreeView aView= new TreeView(aModel,aController);
-		Example.open(aView,aDimension,"樹状整列");
+		Example.open(aView,aDimension,fileName[fileName.length-1]);//==================================変更点7/23====
 		aModel.calculateTree(isViewProcess);
 		System.out.println("疑問点：ブランチ間の交差は容認されるものなのか？(semilattice.txtにて発生)");
 	}
@@ -93,14 +101,8 @@ public class Example {
 		int answer = fileChooser.showOpenDialog(null);
 		if(answer != JFileChooser.APPROVE_OPTION)
 		{
-			File aFile = new File("./tree.txt");
-			if(aFile.exists())
-			{ 
-				return aFile.toString(); //app実行時の場合
-			} else 
-			{
-				return "./ExampleText/tree.txt"; //make test時の場合
-			}
+            System.exit(0);
+			return null;
 		}else
 		{
             File aFile = fileChooser.getSelectedFile();
