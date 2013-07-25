@@ -18,7 +18,7 @@ import java.io.File;
  * 7/23 虎谷
  */
 
-class radio extends Thread implements ActionListener{
+class Radio extends Thread implements ActionListener{
     /**
      * ファイル選択のラジオボタンをactionPerformedとコンストラクタが共有するため
      * 7/23 虎谷
@@ -51,7 +51,7 @@ class radio extends Thread implements ActionListener{
      * 7/23 虎谷
      */
     
-    public radio(){
+    public Radio(){
         aWindow = new JFrame("ファイル選択");
         aWindow.setBounds(100, 100, 180, 300);
         aWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

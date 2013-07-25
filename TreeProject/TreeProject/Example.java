@@ -44,7 +44,7 @@ public class Example {
 	public static void main(String[] args)
 	{
         //==================================変更点7/23====↓
-        radio aRadio = new radio();
+        Radio aRadio = new Radio();
         aRadio.waitEvent();//==================================変更点7/25====
         String filePath = aRadio.selectFile();
         if(filePath == null)
