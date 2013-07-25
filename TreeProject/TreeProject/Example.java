@@ -35,10 +35,6 @@ public class Example {
 	 **/
 	static final Font aFont=new Font("Serif",Font.PLAIN,12);//要求仕様
 	/**
-	 アニメーションのオンオフ
-	 **/
-	static boolean isViewProcess = true;
-	/**
 	 ウィンドウのサイズを固定する定数800*700とする。
 	 **/
 	static Dimension aDimension = new Dimension(800,700);//ウインドウサイズ
@@ -49,6 +45,7 @@ public class Example {
 	{
         //==================================変更点7/23====↓
         radio aRadio = new radio();
+        aRadio.waitEvent();//==================================変更点7/25====
         String filePath = aRadio.selectFile();
         if(filePath == null)
         {
@@ -56,6 +53,7 @@ public class Example {
         }
         String[] fileName = filePath.split("/");
         //==================================変更点7/23====↑
+        boolean isViewProcess = aRadio.selectAnimetion();//==================================変更点7/25====
 		
 		//デフォルトでこのテキストを呼び出し、後でユーザに読み込みをしてもらう
 		TreeModel aModel = new TreeModel();
