@@ -375,7 +375,7 @@ public class TreeModel extends mvc.Model
 				aString = br.readLine();
 			}
 			if(checka != checkb && checka == 0 ){
-				System.out.println("ちがう！！ちがうのよ！！コレは私の求めている物と違うの！！！");
+				System.out.println("不正なファイルが入力されました、もう一度きどうからやり直してください。");
 				System.exit(0);
 			}
 		} 
