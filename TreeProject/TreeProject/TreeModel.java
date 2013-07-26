@@ -322,10 +322,6 @@ public class TreeModel extends mvc.Model
 		}
 		return;
 	}
-	
-	
-	
-	
 	/**
 	 * ファイルからそれぞれの情報を読み取る
 	 * 小山 144542 2013/6/3
@@ -337,6 +333,7 @@ public class TreeModel extends mvc.Model
 	public void inputTree(String fileName)	
 	{
 		int maxLevel=0,maxWidth=0;//最大何階層、最大文字作画長さを保持
+		int checka = 0,checkb = 0;
 		try
 		{
 			ArrayList<TreeNode> bufNodes = new ArrayList<TreeNode>();//ID付与前の一時格納用
@@ -363,10 +360,12 @@ public class TreeModel extends mvc.Model
 					//Treeサイズ決定処理　最も長い単語＊最も大きい階層の数により、当Treeの理論最大Y軸サイズが求められる
 					if(abuffer.getWidth()>maxWidth) maxWidth = abuffer.getWidth();
 					if(levelCount>maxLevel) maxLevel = levelCount;
+					checkb++;
 				}
 				else if(aString.matches("[0-9]*, [a-zA-Z]*"))
 				{
 					inputNodeNumber(aString,bufNodes);
+					checka++;
 				}
 				else if(aString.matches("[0-9]*, [0-9]*"))
 				{
@@ -374,9 +373,11 @@ public class TreeModel extends mvc.Model
 					this.branchs.add(treeBuffer);
 				}
 				aString = br.readLine();
-				
-				
-			}		
+			}
+			if(checka != checkb && checka == 0 ){
+				System.out.println("ちがう！！ちがうのよ！！コレは私の求めている物と違うの！！！");
+				System.exit(0);
+			}
 		} 
         catch (IOException e)
 		{
@@ -386,6 +387,7 @@ public class TreeModel extends mvc.Model
 		height = nodesMax;
 		width = (maxWidth + distanceX)* maxLevel;
 		aGraphics.dispose();//文字幅取得のため用いたグラフィックスを閉じる
+		
 	}
 	/**
 	 * ファイルからノードの階層情報を取得し返す。
